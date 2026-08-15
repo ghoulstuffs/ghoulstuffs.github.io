@@ -1,0 +1,522 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ghoulstuffs.github.io — style.css
+
+   CONTENTS
+     1. TOKENS      every colour + timing in one place
+     2. BASE        reset, page background
+     3. MASTHEAD
+     4. FRAME       the paper panel
+     5. INK         the drawing's fills, lines and textures
+     6. POSES       the cross-fade
+     7. ORBIT       the five social links
+     8. FOOTER
+     9. RESPONSIVE
+    10. REDUCED MOTION
+
+   Change a colour once in section 1 and the whole page follows.
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. TOKENS ─────────────────────────────────────────────────── */
+:root {
+  /* ink & paper */
+  --bg:        #0d0d13;
+  --bg-2:      #16161f;
+  --paper:     #efe9dd;
+  --paper-2:   #fbf8f1;
+  --ink:       #14141a;
+
+  /* the character — the only thing in the panel that carries colour */
+  --skin:      #f8e3d0;
+  --hair:      #17171f;
+  --jacket:    #1c1c26;
+  --tie:       #101017;
+  --eye:       #fffdf8;
+
+  /* accents */
+  --accent:    #7a4dff;   /* the purple: eyes, tie, orbs, pins */
+  --accent-lo: #b9a2ff;
+  --screen:    #14141a;
+
+  --vest:      #1c1c26;
+  --shirt:     #fbf8f1;
+
+  /* type */
+  --display: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* motion — slow these down or speed them up here */
+  --pose-cycle: 19s;   /* full loop through all four poses */
+  --poses: 4;
+  --orbit-speed: 34s;  /* one lap of the social orbs */
+
+  /* orbit geometry */
+  --orbit-x: 50%;      /* centre of the ellipse, across the panel */
+  --orbit-y: 70%;      /* ...and down it. Lower = further from his face */
+  --radius: 31cqw;     /* how wide the orbit is */
+  --squash: 0.56;      /* 1 = a circle, 0 = a flat line */
+  --tilt: -9deg;
+  --orb: clamp(46px, 6.4cqw, 68px);
+}
+
+
+/* ── 2. BASE ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--bg-2) 0%, var(--bg) 60%),
+    var(--bg);
+  color: var(--paper);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* faint grid so the dark ground isn't dead flat */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+.page {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 64px) clamp(16px, 4vw, 40px) clamp(40px, 6vw, 80px);
+}
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.u-hidden {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+
+/* ── 3. MASTHEAD ───────────────────────────────────────────────── */
+.masthead { margin-bottom: clamp(22px, 3.5vw, 40px); }
+
+.masthead__kicker {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent-lo);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.masthead__dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(122,77,255,.16);
+}
+
+.masthead__name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(46px, 11vw, 118px);
+  line-height: .84;
+  letter-spacing: -.035em;
+  margin: 0;
+  color: var(--paper-2);
+}
+.masthead__name span {
+  color: transparent;
+  -webkit-text-stroke: 1.6px var(--accent-lo);
+}
+
+.masthead__line {
+  margin: 18px 0 0;
+  font-size: clamp(12px, 1.5vw, 14px);
+  letter-spacing: .1em;
+  color: rgba(242,236,224,.6);
+}
+
+
+/* ── 4. FRAME ──────────────────────────────────────────────────── */
+.frame {
+  container-type: inline-size;      /* lets the orbit scale with the panel */
+  position: relative;
+  aspect-ratio: 1000 / 680;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: 3px;
+  background: var(--paper);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,.06),
+    0 30px 70px -30px rgba(0,0,0,.9),
+    0 0 0 1px rgba(185,162,255,.16);
+}
+
+.scene { display: block; width: 100%; height: 100%; }
+
+.plate {
+  position: absolute;
+  z-index: 3;
+  left: 0; bottom: 0;
+  margin: 0;
+  padding: 9px 18px 9px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.plate span { color: var(--accent-lo); margin-right: 10px; }
+
+/* sound toggle — mirrors the plate, top right of the panel */
+.sound {
+  position: absolute;
+  z-index: 3;
+  top: 0; right: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 9px 14px 9px 12px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color .18s ease;
+}
+.sound:hover { background: var(--accent); }
+.sound:focus-visible { outline: 3px solid var(--accent-lo); outline-offset: -3px; }
+
+.sound__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 11px;
+}
+.sound__bars i {
+  display: block;
+  width: 2px;
+  height: 100%;
+  background: var(--accent-lo);
+  transform: scaleY(.25);
+  transform-origin: bottom;
+}
+.sound:hover .sound__bars i { background: var(--paper); }
+body.is-playing .sound__bars i { animation: eq .6s ease-in-out infinite alternate; }
+.sound__bars i:nth-child(2) { animation-delay: -.21s; }
+.sound__bars i:nth-child(3) { animation-delay: -.42s; }
+.sound__bars i:nth-child(4) { animation-delay: -.13s; }
+@keyframes eq { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
+
+/* the monitor in the drawing picks up the beat */
+body.is-playing .scan-hot { animation: pulse 1.11s steps(1) infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: .25; } }
+
+
+/* ── 5. INK ────────────────────────────────────────────────────── */
+/* Lines come first, fills second. Order matters: a shape written as
+   class="f-blue ln-2" wants the blue to win over the line's fill:none. */
+.ln, .ln-2, .ln-3, .ln-thin, .ln-accent, .ln-accent-3 {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ln          { stroke: var(--ink); stroke-width: 2.4; }
+.ln-thin     { stroke: var(--ink); stroke-width: 1.5; opacity: .55; }
+.ln-2        { stroke: var(--ink); stroke-width: 2.8; }
+.ln-3        { stroke: var(--ink); stroke-width: 3.6; }
+.ln-accent   { stroke: var(--accent); stroke-width: 2.4; opacity: .8; }
+.ln-accent-3 { stroke: var(--accent); stroke-width: 3.4; }
+
+/* fills */
+.f-ink     { fill: var(--ink); }
+.f-paper   { fill: var(--paper-2); }
+.f-skin    { fill: var(--skin); }
+.f-accent  { fill: var(--accent); }
+.f-iris    { fill: var(--accent); }
+.f-blue    { fill: url(#tone2); }
+.f-blue-d  { fill: url(#tone3); }
+.f-vest    { fill: var(--vest); }
+.f-shirt   { fill: var(--shirt); }
+.f-desk    { fill: var(--paper-2); }
+.f-screen  { fill: var(--screen); }
+.f-floor   { fill: var(--paper); }
+.f-hair    { fill: var(--hair); }
+.f-jacket  { fill: var(--jacket); }
+.f-tie     { fill: var(--tie); }
+.f-eye     { fill: var(--eye); }
+.f-sky     { fill: var(--paper-2); }
+.f-city    { fill: url(#dots-lg); }
+.f-none    { fill: none; }
+.o-45      { opacity: .45; }
+.o-80      { opacity: .8; }
+
+/* textures */
+.dot       { fill: var(--ink); opacity: .55; }
+.dot-soft  { fill: var(--ink); opacity: .16; }
+.hatch-line{ stroke: var(--ink); stroke-width: 1.5; opacity: .5; }
+.hatch-fill{ fill: url(#hatch); opacity: .34; }
+.hatch-soft{ fill: url(#hatch); opacity: .16; }
+.tone      { opacity: .5; pointer-events: none; }
+.grain     { opacity: .12; mix-blend-mode: multiply; pointer-events: none; }
+.vig-in    { stop-color: rgba(22,22,28,0); }
+.vig-out   { stop-color: rgba(22,22,28,.42); }
+.vignette  { pointer-events: none; }
+
+/* room details */
+.rays        { fill: var(--ink); opacity: .05; }
+.hair-shine  { fill: var(--paper-2); opacity: .42; }
+.floor-line  { fill: none; stroke: var(--ink); stroke-width: 1.6; opacity: .18; }
+.light       { fill: var(--paper-2); opacity: .85; }
+.cloud       { fill: var(--ink); opacity: .09; }
+.blinds      { fill: none; stroke: var(--ink); stroke-width: 3; opacity: .35; }
+.string      { fill: none; stroke: var(--ink); stroke-width: 1.8; opacity: .6; }
+.rings       { fill: none; stroke: var(--ink); stroke-width: 3; opacity: .8; }
+.clip        { fill: none; stroke: var(--ink); stroke-width: 3.4; stroke-linecap: round; }
+.scan        { fill: none; stroke: var(--paper); stroke-width: 2; opacity: .3; }
+.scan-hot    { fill: none; stroke: var(--accent); stroke-width: 3.4; }
+.steam       { fill: none; stroke: var(--ink); stroke-width: 2.4; opacity: .35; stroke-linecap: round; }
+.blush       { stroke: var(--accent); stroke-width: 2; opacity: .45; stroke-linecap: round; }
+.belt        { fill: none; stroke: var(--ink); stroke-width: 5; opacity: .9; }
+.shade       { fill: var(--ink); opacity: .13; }
+.leaf        { fill: var(--ink); stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; }
+
+/* face */
+.lash        { fill: none; stroke: var(--ink); stroke-width: 4.2; stroke-linecap: round; }
+.lash--heavy { stroke-width: 6; }
+.brow        { fill: none; stroke: var(--ink); stroke-width: 3.4; stroke-linecap: butt; }
+.shine-line  { fill: none; stroke: var(--ink); stroke-width: 2.6; opacity: .45; stroke-linecap: round; }
+
+/* Limbs are two stacked strokes: a fat ink one, then a thinner cloth
+   one on top. Move the path and the outline follows. Arms are white
+   because they're shirtsleeves; legs are dark because they're trousers. */
+.limb-out     { fill: none; stroke: var(--ink);   stroke-width: 33; stroke-linecap: round; stroke-linejoin: round; }
+.limb-sleeve  { fill: none; stroke: var(--jacket); stroke-width: 26; stroke-linecap: round; stroke-linejoin: round; }
+.limb-trouser { fill: none; stroke: var(--jacket); stroke-width: 36; stroke-linecap: round; stroke-linejoin: round; }
+#legs .limb-out { stroke-width: 46; }
+.cuff { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; }
+.beat { fill: var(--ink); opacity: .5; }
+
+
+/* ── 6. POSES ──────────────────────────────────────────────────── */
+/* Each pose owns one slice of the loop, then dissolves into the next.
+   Add a pose: copy a <g class="pose pose-N"> block, add pose-N below,
+   and change --poses in the tokens. */
+.pose {
+  opacity: 0;
+  animation: pose-turn var(--pose-cycle) linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pose-1 { animation-delay: calc(var(--pose-cycle) *  0 / -4); }
+.pose-2 { animation-delay: calc(var(--pose-cycle) *  1 / -4); }
+.pose-3 { animation-delay: calc(var(--pose-cycle) *  2 / -4); }
+.pose-4 { animation-delay: calc(var(--pose-cycle) *  3 / -4); }
+
+@keyframes pose-turn {
+  0%   { opacity: 1; }
+  21%  { opacity: 1; }
+  25%  { opacity: 0; }
+  96%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* he breathes, so he never reads as a flat sticker */
+.cast {
+  animation: breathe 7s ease-in-out infinite;
+  transform-origin: 500px 660px;
+}
+@keyframes breathe {
+  0%, 100% { transform: translateY(0)      scale(1); }
+  50%      { transform: translateY(-5px)   scale(1.004); }
+}
+
+/* the wall drifts a hair, for depth */
+.bg { animation: drift 26s ease-in-out infinite; }
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-7px, 3px); }
+}
+
+.steam { animation: steam 5s ease-in-out infinite; }
+@keyframes steam {
+  0%, 100% { opacity: .12; transform: translateY(2px); }
+  50%      { opacity: .42; transform: translateY(-6px); }
+}
+
+
+/* ── 7. ORBIT ──────────────────────────────────────────────────── */
+/* The ellipse is one squashed, tilted layer. Each orb rotates inside
+   it, then un-rotates itself so the icon always stays upright. */
+.orbit {
+  position: absolute;
+  z-index: 2;
+  left: var(--orbit-x);
+  top: var(--orbit-y);
+  width: 0; height: 0;
+  transform: rotate(var(--tilt)) scaleY(var(--squash));
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  left: 0; top: 0;
+  pointer-events: auto;
+  text-decoration: none;
+  animation: lap var(--orbit-speed) linear infinite;
+  animation-delay: calc(var(--orbit-speed) * var(--i) / -5);
+}
+@keyframes lap {
+  from { transform: rotate(0deg)   translateX(var(--radius)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg); }
+}
+
+/* undoes the squash + tilt, so the badge sits level */
+.orb__level {
+  display: block;
+  transform: scaleY(calc(1 / var(--squash))) rotate(calc(-1 * var(--tilt)));
+}
+
+/* the visible badge. Scales up at the near side of the orbit,
+   down and pale at the far side — that's the whole depth trick. */
+.orb__disc {
+  display: grid;
+  place-items: center;
+  width: var(--orb);
+  height: var(--orb);
+  margin: calc(var(--orb) / -2);
+  border-radius: 50%;
+  background: var(--paper-2);
+  border: 3px solid var(--ink);
+  color: var(--ink);
+  box-shadow: 0 10px 22px -12px rgba(0,0,0,.7);
+  animation: depth var(--orbit-speed) linear infinite;
+  animation-delay: inherit;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+@keyframes depth {
+  0%   { transform: scale(1);    opacity: 1; }
+  25%  { transform: scale(1.14); opacity: 1; }
+  50%  { transform: scale(1);    opacity: 1; }
+  75%  { transform: scale(.78);  opacity: .45; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.orb:nth-child(1) .orb__disc { animation-delay: calc(var(--orbit-speed) * 0 / -5); }
+.orb:nth-child(2) .orb__disc { animation-delay: calc(var(--orbit-speed) * 1 / -5); }
+.orb:nth-child(3) .orb__disc { animation-delay: calc(var(--orbit-speed) * 2 / -5); }
+.orb:nth-child(4) .orb__disc { animation-delay: calc(var(--orbit-speed) * 3 / -5); }
+.orb:nth-child(5) .orb__disc { animation-delay: calc(var(--orbit-speed) * 4 / -5); }
+
+.orb__disc svg {
+  width: 46%;
+  height: 46%;
+  fill: currentColor;
+}
+
+.fxd-mark {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: -.5px;
+  fill: currentColor;
+}
+.orb--own .orb__disc svg { width: 76%; height: 76%; }
+
+/* FashionXD is hers, not a profile — so it reads inverted */
+.orb--own .orb__disc { background: var(--accent); color: var(--paper-2); }
+
+.orb__label {
+  position: absolute;
+  top: calc(var(--orb) / 2 + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 9px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+}
+
+.orb:hover .orb__disc,
+.orb:focus-visible .orb__disc {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper-2);
+}
+.orb--own:hover .orb__disc,
+.orb--own:focus-visible .orb__disc {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--accent-lo);
+}
+.orb:hover .orb__label,
+.orb:focus-visible .orb__label { opacity: 1; }
+
+.orb:focus-visible { outline: none; }
+.orb:focus-visible .orb__disc { box-shadow: 0 0 0 4px var(--accent-lo); }
+
+/* park the whole ring while you're aiming at a link */
+.orbit:has(.orb:hover) .orb,
+.orbit:has(.orb:hover) .orb__disc,
+.orbit:has(.orb:focus-visible) .orb,
+.orbit:has(.orb:focus-visible) .orb__disc { animation-play-state: paused; }
+
+
+/* ── 8. FOOTER ─────────────────────────────────────────────────── */
+.footer { margin-top: clamp(22px, 3vw, 34px); }
+.footer__note {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: rgba(242,236,224,.55);
+}
+.footer__note--dim { color: rgba(242,236,224,.28); }
+
+
+/* ── 9. RESPONSIVE ─────────────────────────────────────────────── */
+/* On a phone the panel goes portrait and crops the sides — he stays
+   centred, and the orbit opens up so nothing lands on his face. */
+@media (max-width: 720px) {
+  .frame {
+    aspect-ratio: 4 / 5;
+    --radius: 38cqw;
+    --squash: 0.5;
+    --orb: clamp(40px, 12cqw, 56px);
+    --orbit-y: 68%;
+  }
+  .masthead__name span { -webkit-text-stroke-width: 1.2px; }
+  .plate { font-size: 10px; padding: 7px 12px; }
+  .sound { font-size: 10px; padding: 7px 11px; gap: 7px; }
+}
+
+
+/* ── 10. REDUCED MOTION ────────────────────────────────────────── */
+/* Nothing moves, but nothing disappears either: pose 1 holds and the
+   orbs park at five even points around the ellipse. */
+@media (prefers-reduced-motion: reduce) {
+  .pose, .cast, .bg, .steam, .orb, .orb__disc,
+  .sound__bars i, .scan-hot { animation: none !important; }
+  .pose { opacity: 0; }
+  .pose-1 { opacity: 1; }
+
+  .orb { transform: rotate(var(--a)) translateX(var(--radius)) rotate(calc(-1 * var(--a))); }
+  .orb:nth-child(1) { --a: 306deg; }
+  .orb:nth-child(2) { --a: 18deg;  }
+  .orb:nth-child(3) { --a: 90deg;  }
+  .orb:nth-child(4) { --a: 162deg; }
+  .orb:nth-child(5) { --a: 234deg; }
+}

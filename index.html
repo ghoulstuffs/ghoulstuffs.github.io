@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+═══════════════════════════════════════════════════════════════════════
+  ghoulstuffs.github.io — index.html
+  Three files: this one, style.css, and sound.js (the music).
+  All the artwork is hand-written SVG. Nothing is loaded from anywhere.
+
+  MAP OF THIS FILE
+    1. <head>          meta + fonts + stylesheet
+    2. #icons          hidden sprite: the 5 social glyphs
+    3. .masthead       name, tagline
+    4. .frame          the illustration
+         .scene        one big inline SVG, drawn in layers:
+                         bg    → wall, window, pinned notes, floor
+                         cast  → 4 poses that cross-fade (.pose-1 … .pose-4)
+                         fg    → desk, binders, coffee, floor papers
+         .orbit        the 5 social links that circle him
+    5. .sound          the music toggle (logic lives in sound.js)
+    6. .footer         credits
+
+  THINGS YOU'LL MOST LIKELY WANT TO CHANGE — search for  [EDIT]
+═══════════════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- [EDIT] page title + description -->
+  <title>ghoulstuffs — SEO content strategy, editorial &amp; prompt engineering</title>
+  <meta name="description" content="Mansi — freelance SEO content strategist, writer and prompt engineer. Editorial at FashionXD, essays on Substack, videos on YouTube.">
+  <meta name="theme-color" content="#0e0e14">
+
+  <meta property="og:title" content="ghoulstuffs">
+  <meta property="og:description" content="SEO content strategy, editorial, and prompt engineering.">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='13' fill='%237a4dff'/><circle cx='16' cy='16' r='5' fill='%230e0e14'/></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ══ 2. ICON SPRITE ══ hidden; each orb pulls one of these with <use> ══ -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-substack" viewBox="0 0 24 24">
+    <path d="M3 3.6h18v3.1H3zM3 9.3h18v3.1H3zM3 15h18v6.4l-9-4.6-9 4.6z"/>
+  </symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" d="M6.6 4.4h10.8a4.2 4.2 0 0 1 4.2 4.2v6.8a4.2 4.2 0 0 1-4.2 4.2H6.6a4.2 4.2 0 0 1-4.2-4.2V8.6a4.2 4.2 0 0 1 4.2-4.2Zm3.6 3.9v7.4l6.4-3.7Z"/>
+  </symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24">
+    <path d="M3.1 8.9h3.7V21H3.1zM4.95 2.6a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4ZM9.6 8.9h3.5v1.8a3.9 3.9 0 0 1 3.5-1.9c3 0 4.3 1.9 4.3 5V21h-3.7v-6c0-1.6-.6-2.6-2-2.6s-2.1 1-2.1 2.6v6H9.6Z"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24">
+    <path d="M3 2.8h5.4l4.3 5.9 5-5.9h2.9l-6.5 7.6L21.4 21H16l-4.6-6.3L6 21H3.1l7-8.2Zm3.1 1.9 10 14.4h1.9L8 4.7Z"/>
+  </symbol>
+  <symbol id="i-fashionxd" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="20.4" fill="none" stroke="currentColor" stroke-width="1.7"/>
+    <text class="fxd-mark" x="24" y="29.4" text-anchor="middle">FXD</text>
+  </symbol>
+</svg>
+
+
+<div class="page">
+
+  <!-- ══ 3. MASTHEAD ══ [EDIT] your name + what you do ══ -->
+  <header class="masthead">
+    <p class="masthead__kicker">ghoulstuffs.github.io <span class="masthead__dot"></span> repo 01</p>
+    <h1 class="masthead__name">GHOUL<span>STUFFS</span></h1>
+    <p class="masthead__line">SEO content strategy &middot; editorial &middot; prompt engineering</p>
+  </header>
+
+
+  <!-- ══ 4. THE PANEL ══ -->
+  <main>
+    <div class="frame">
+      <!-- ─── 4a. THE DRAWING ─────────────────────────────────────────
+           viewBox is 1000 × 680. Every colour lives in style.css —
+           the shapes here only carry class names (f- = fill, ln = line).
+      ──────────────────────────────────────────────────────────────── -->
+      <svg class="scene" viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid slice"
+           role="img" aria-labelledby="sceneTitle sceneDesc" xmlns="http://www.w3.org/2000/svg">
+        <title id="sceneTitle">An office worker in a paper-covered room</title>
+        <desc id="sceneDesc">Ink and halftone drawing: a dark-haired figure in a waistcoat and tie stands in a cluttered office, shifting between thinking, reading a file, resting, and raising a pen.</desc>
+
+        <defs>
+          <!-- halftone dot screens: the whole "printed manga" feel comes from these -->
+          <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
+            <circle class="dot" cx="2" cy="2" r="1.5"/><circle class="dot" cx="6" cy="6" r="1.5"/>
+          </pattern>
+          <pattern id="dots-lg" width="13" height="13" patternUnits="userSpaceOnUse">
+            <circle class="dot" cx="3.2" cy="3.2" r="2.9"/><circle class="dot" cx="9.7" cy="9.7" r="2.9"/>
+          </pattern>
+          <pattern id="tone2" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect class="f-paper" width="8" height="8"/>
+            <circle class="dot" cx="2" cy="2" r="1.7"/><circle class="dot" cx="6" cy="6" r="1.7"/>
+          </pattern>
+          <pattern id="tone3" width="7" height="7" patternUnits="userSpaceOnUse">
+            <rect class="f-paper" width="7" height="7"/>
+            <circle class="dot" cx="1.8" cy="1.8" r="2.5"/><circle class="dot" cx="5.3" cy="5.3" r="2.5"/>
+          </pattern>
+          <pattern id="tone-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-42)">
+            <rect class="f-paper" width="7" height="7"/>
+            <line class="hatch-line" x1="0" y1="0" x2="0" y2="7"/>
+          </pattern>
+          <pattern id="dots-sm" width="6" height="6" patternUnits="userSpaceOnUse">
+            <circle class="dot-soft" cx="1.5" cy="1.5" r="1"/><circle class="dot-soft" cx="4.5" cy="4.5" r="1"/>
+          </pattern>
+          <!-- pencil hatching for shadow sides -->
+          <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+            <line class="hatch-line" x1="0" y1="0" x2="0" y2="7"/>
+          </pattern>
+          <!-- paper grain -->
+          <filter id="grain" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+            <feColorMatrix type="saturate" values="0"/>
+          </filter>
+          <radialGradient id="vig" cx="50%" cy="46%" r="72%">
+            <stop offset="55%" class="vig-in"/><stop offset="100%" class="vig-out"/>
+          </radialGradient>
+
+          <!-- ray for the manga focus-lines behind his head -->
+          <path id="ray" d="M0 -13 L700 -2.5 L700 2.5 L0 13 Z"/>
+
+          <!-- three pinned-paper templates, drawn around their own centre -->
+          <g id="doc">
+            <rect class="f-paper ln-2" x="-31" y="-42" width="62" height="84"/>
+            <rect class="f-ink o-80" x="-21" y="-31" width="42" height="4.5"/>
+            <rect class="f-ink o-45" x="-21" y="-19" width="34" height="2.6"/>
+            <rect class="f-ink o-45" x="-21" y="-11" width="42" height="2.6"/>
+            <rect class="f-ink o-45" x="-21" y="-3" width="27" height="2.6"/>
+            <rect x="-21" y="9" width="42" height="24" fill="url(#dots)"/>
+            <circle class="f-ink" cx="0" cy="-36" r="3.4"/>
+          </g>
+          <g id="photo">
+            <rect class="f-paper ln-2" x="-36" y="-27" width="72" height="54"/>
+            <rect x="-30" y="-21" width="60" height="36" fill="url(#dots-lg)"/>
+            <path class="ln" d="M-30 15 L-15 -7 L-3 7 L11 -13 L30 15"/>
+            <circle class="f-ink" cx="0" cy="-23" r="3.2"/>
+          </g>
+          <g id="card">
+            <rect class="f-paper ln-2" x="-37" y="-25" width="74" height="50"/>
+            <rect class="f-ink o-45" x="-27" y="-15" width="38" height="3"/>
+            <rect class="f-ink o-45" x="-27" y="-7" width="50" height="3"/>
+            <path class="ln-2" d="M-29 -19 L27 17 M27 -19 L-29 17"/>
+            <circle class="f-ink" cx="0" cy="-21" r="3.2"/>
+          </g>
+
+          <!-- ─── FIGURE PARTS shared by every pose ───
+               Limbs are drawn as two stacked strokes: a fat ink one and a
+               thinner cloth one on top. To move an arm, move its "d" — the
+               outline follows automatically. -->
+          <g id="head">
+            <path class="f-skin ln-2" d="M478 244 L522 244 L524 318 L476 318 Z"/>
+            <path class="shade" d="M480 256 L520 256 L520 282 Q500 298 480 282 Z"/>
+            <path class="f-hair" d="M500 116 C464 116 444 148 448 198 C450 224 452 244 455 264 L464 234 L470 258 L478 220 L484 214 L516 214 L522 220 L530 258 L536 234 L545 264 C548 244 550 224 552 198 C556 148 536 116 500 116 Z"/>
+            <path class="f-skin ln-2" d="M460 208 C460 166 473 144 500 144 C527 144 540 166 540 208 C540 234 532 252 520 262 C513 268 507 272 500 273 C493 272 487 268 480 262 C468 252 460 234 460 208 Z"/>
+            <path class="f-skin ln-2" d="M463 198 C453 194 450 208 454 219 C456 227 462 229 465 224"/>
+            <path class="f-skin ln-2" d="M537 198 C547 194 550 208 546 219 C544 227 538 229 535 224"/>
+            <path class="f-hair" d="M458 202 C454 154 472 124 500 122 C530 124 550 154 546 202 L539 160 L527 208 L518 158 L503 218 L494 160 L481 204 L471 156 L462 196 Z"/>
+            <path class="f-hair" d="M504 128 L517 152 L514 232 L501 242 L498 186 Z"/>
+            <path class="f-hair" d="M459 178 L454 248 L468 224 L470 174 Z"/>
+            <path class="f-hair" d="M541 178 L546 248 L532 224 L530 174 Z"/>
+            <path class="hair-shine" d="M474 152 C483 141 494 136 504 137 L501 145 C493 144 485 149 478 158 Z"/>
+            <path class="hair-shine" d="M534 160 C540 166 544 174 545 182 L539 184 C537 176 533 169 529 165 Z"/>
+            <path class="ln-thin" d="M496 246 C502 252 507 251 509 247"/>
+          </g>
+
+          <g id="torso">
+            <path class="f-shirt ln-2" d="M466 292 L534 292 L544 578 L456 578 Z"/>
+            <path class="f-jacket ln-2" d="M450 306 L404 330 L396 394 L404 492 L414 578 L492 584 L494 440 L464 318 Z"/>
+            <path class="f-jacket ln-2" d="M550 306 L596 330 L604 394 L596 492 L586 578 L508 584 L506 440 L536 318 Z"/>
+            <path class="ln-2" d="M474 312 L494 440 M526 312 L506 440"/>
+            <path class="f-shirt ln-2" d="M500 294 L466 304 L486 340 L500 312 L514 340 L534 304 Z"/>
+            <path class="f-tie ln-2" d="M500 312 L489 326 L500 344 L511 326 Z"/>
+            <path class="f-tie ln-2" d="M492 344 L508 344 L515 438 L500 456 L485 438 Z"/>
+            <circle class="f-accent ln-2" cx="468" cy="380" r="7"/>
+            <path class="hatch-fill" d="M450 306 L404 330 L396 394 L404 492 L414 578 L446 580 L442 390 Z"/>
+          </g>
+
+          <g id="legs">
+            <path class="limb-out" d="M478 566 C472 620 470 660 472 690"/>
+            <path class="limb-out" d="M522 566 C528 620 530 660 528 690"/>
+            <path class="f-ink" d="M446 538 L554 538 L562 620 L528 638 L500 594 L472 638 L438 620 Z"/>
+            <path class="limb-trouser" d="M478 566 C472 620 470 660 472 690"/>
+            <path class="limb-trouser" d="M522 566 C528 620 530 660 528 690"/>
+            <path class="f-jacket" d="M452 544 L548 544 L556 616 L526 632 L500 588 L474 632 L444 616 Z"/>
+          </g>
+
+          <!-- a hand, drawn at origin; each pose places it with a transform -->
+          <g id="hand">
+            <path class="f-skin ln-2" d="M-13 -8 C-17 -1 -16 8 -9 12 C-1 16 9 14 13 6 C16 -1 14 -9 8 -12 C1 -15 -8 -14 -13 -8 Z"/>
+            <path class="ln-thin" d="M-6 -10 L-4 1 M2 -12 L3 0 M9 -10 L8 -1"/>
+          </g>
+
+          <!-- props -->
+          <g id="folder">
+            <path class="f-blue ln-2" d="M-76 -34 L74 -46 L80 30 L-70 42 Z"/>
+            <path class="f-paper ln-2" d="M-68 -28 L2 -34 L6 34 L-62 38 Z"/>
+            <path class="f-paper ln-2" d="M6 -34 L72 -39 L76 24 L10 32 Z"/>
+            <path class="ln-thin" d="M-56 -16 L-8 -20 M-55 -6 L-10 -10 M-54 4 L-20 1 M18 -22 L64 -26 M19 -12 L65 -16 M20 -2 L48 -5"/>
+            <path class="ln" d="M2 -34 L6 34"/>
+          </g>
+          <g id="pen">
+            <path class="f-ink" d="M-5 -46 L5 -46 L6 22 L0 34 L-6 22 Z"/>
+            <path class="f-paper" d="M-6 -14 L6 -14 L6.4 8 L-6.4 8 Z"/>
+            <path class="f-paper" d="M-2 16 L2 16 L1 30 L-1 30 Z"/>
+          </g>
+        </defs>
+
+
+        <!-- ── LAYER 1 · ROOM ────────────────────────────────────── -->
+        <g class="bg">
+          <rect class="f-paper" x="0" y="0" width="1000" height="680"/>
+
+          <!-- focus lines radiating from behind his head -->
+          <g class="rays" transform="translate(500 210)">
+            <use href="#ray" transform="rotate(0)"/>   <use href="#ray" transform="rotate(24)"/>
+            <use href="#ray" transform="rotate(48)"/>  <use href="#ray" transform="rotate(72)"/>
+            <use href="#ray" transform="rotate(96)"/>  <use href="#ray" transform="rotate(120)"/>
+            <use href="#ray" transform="rotate(144)"/> <use href="#ray" transform="rotate(168)"/>
+            <use href="#ray" transform="rotate(192)"/> <use href="#ray" transform="rotate(216)"/>
+            <use href="#ray" transform="rotate(240)"/> <use href="#ray" transform="rotate(264)"/>
+            <use href="#ray" transform="rotate(288)"/> <use href="#ray" transform="rotate(312)"/>
+            <use href="#ray" transform="rotate(336)"/>
+          </g>
+
+          <!-- floor: the wall line bows down in the middle, which is what
+               sells the wide-angle lens -->
+          <path class="f-floor" d="M-10 452 Q500 512 1010 452 L1010 690 L-10 690 Z"/>
+          <path class="ln-2" d="M-10 452 Q500 512 1010 452"/>
+          <path class="hatch-soft" d="M-10 452 Q500 512 1010 452 L1010 560 Q500 620 -10 560 Z"/>
+          <path class="floor-line" d="M300 690 L462 500 M520 690 L512 498 M760 690 L570 502 M60 690 L392 496"/>
+
+          <!-- window, left wall -->
+          <g class="window">
+            <rect class="f-sky ln-3" x="36" y="64" width="222" height="262" rx="4"/>
+            <path class="f-city" d="M40 250 L40 322 L254 322 L254 214 L236 214 L236 196 L218 196 L218 240 L198 240 L198 218 L172 218 L172 254 L150 254 L150 228 L124 228 L124 262 L100 262 L100 238 L74 238 L74 268 L56 268 L56 250 Z"/>
+            <path class="cloud" d="M74 122 q16 -22 38 -12 q12 -20 34 -8 q22 -2 20 20 z"/>
+            <path class="cloud" d="M170 168 q14 -18 32 -10 q18 -4 18 18 z"/>
+            <g class="blinds">
+              <path d="M40 78 H254 M40 96 H254 M40 114 H254 M40 132 H254 M40 150 H254"/>
+            </g>
+            <path class="ln-3 f-none" d="M147 64 V326 M36 200 H258"/>
+            <rect class="f-none ln-3" x="36" y="64" width="222" height="262" rx="4"/>
+          </g>
+          <!-- light spilling onto the floor -->
+          <path class="light" d="M258 326 L470 470 L268 520 L54 466 Z"/>
+
+          <!-- low cabinet under the window, with the office plant on top -->
+          <g class="cabinet">
+            <path class="f-desk ln-3" d="M62 388 L248 381 L254 502 L56 512 Z"/>
+            <path class="ln-2" d="M60 428 L250 421 M61 466 L252 459"/>
+            <path class="hatch-fill" d="M62 388 L100 386 L104 508 L56 512 Z"/>
+            <path class="ln-3" d="M112 404 H166 M114 444 H168 M116 482 H170"/>
+            <path class="f-vest ln-2" d="M118 358 L184 355 L179 386 L124 389 Z"/>
+            <path class="leaf" d="M151 356 C128 344 118 318 130 300 C148 310 156 332 151 356 Z"/>
+            <path class="leaf" d="M151 356 C176 348 190 324 181 304 C160 312 148 332 151 356 Z"/>
+            <path class="leaf" d="M151 356 C146 330 154 306 172 296 C178 318 168 344 151 356 Z"/>
+            <path class="ln-thin" d="M151 356 L146 312 M151 356 L166 316"/>
+          </g>
+
+          <!-- the pinned wall: notes, photos, index cards + string -->
+          <g class="wall">
+            <path class="string" d="M636 78 L742 168 L880 96 L954 232"/>
+            <path class="string" d="M660 300 L788 246 L920 350"/>
+            <path class="string" d="M330 66 L436 108 L588 58"/>
+            <use href="#doc"   transform="translate(636 78) rotate(-5)"/>
+            <use href="#photo" transform="translate(742 168) rotate(4)"/>
+            <use href="#doc"   transform="translate(880 96) rotate(3)"/>
+            <use href="#card"  transform="translate(954 232) rotate(-6)"/>
+            <use href="#photo" transform="translate(660 300) rotate(-3)"/>
+            <use href="#doc"   transform="translate(788 246) rotate(6)"/>
+            <use href="#card"  transform="translate(920 350) rotate(2)"/>
+            <use href="#doc"   transform="translate(838 400) rotate(-4)"/>
+            <use href="#photo" transform="translate(330 66) rotate(5) scale(.86)"/>
+            <use href="#card"  transform="translate(436 108) rotate(-3) scale(.8)"/>
+            <use href="#doc"   transform="translate(588 58) rotate(4) scale(.82)"/>
+            <use href="#card"  transform="translate(318 196) rotate(6) scale(.78)"/>
+            <use href="#photo" transform="translate(984 30) rotate(-4) scale(.9)"/>
+          </g>
+        </g>
+
+
+        <!-- ── LAYER 2 · THE FIGURE ──────────────────────────────
+             Four poses stacked in the same place. CSS fades one into
+             the next. Add a fifth by copying a block, giving it
+             class "pose pose-5" and bumping --poses in style.css.
+        ─────────────────────────────────────────────────────────── -->
+        <g class="cast">
+
+          <!-- POSE 1 · weighing it up, hand at the jaw -->
+          <g class="pose pose-1">
+            <use href="#legs"/>
+            <use href="#torso"/>
+            <g class="arm">
+              <path class="limb-out" d="M412 364 Q394 420 406 468 Q480 488 566 452"/>
+              <path class="limb-out" d="M588 364 Q614 404 604 450 Q566 374 530 300"/>
+              <path class="limb-sleeve" d="M412 364 Q394 420 406 468 Q480 488 566 452"/>
+              <path class="limb-sleeve" d="M588 364 Q614 404 604 450 Q566 374 530 300"/>
+            </g>
+            <g transform="rotate(-4 500 278)">
+              <use href="#head"/>
+              <g class="face">
+                <path class="f-eye ln-2" d="M470 221 C476 212 489 210 496 217 C492 228 477 229 470 221 Z"/>
+                <path class="f-eye ln-2" d="M530 221 C524 212 511 210 504 217 C508 228 523 229 530 221 Z"/>
+                <ellipse class="f-iris" cx="484" cy="220" rx="5.4" ry="6.4"/>
+                <ellipse class="f-iris" cx="516" cy="220" rx="5.4" ry="6.4"/>
+                <ellipse class="f-ink" cx="484" cy="220" rx="2.1" ry="3"/>
+                <ellipse class="f-ink" cx="516" cy="220" rx="2.1" ry="3"/>
+                <circle class="f-paper" cx="481" cy="216" r="1.7"/>
+                <circle class="f-paper" cx="513" cy="216" r="1.7"/>
+                <path class="lash" d="M467 219 C475 209 490 207 499 215 M533 219 C525 209 510 207 501 215"/>
+                <path class="brow" d="M470 195 L495 191 M530 195 L505 191"/>
+                <path class="ln-2" d="M493 259 L510 257"/>
+              </g>
+              <use href="#hand" transform="translate(524 290) rotate(-18) scale(.92)"/>
+            </g>
+            <use href="#hand" transform="translate(572 450) rotate(10) scale(.92)"/>
+          </g>
+
+          <!-- POSE 2 · reading, eyes down -->
+          <g class="pose pose-2">
+            <use href="#legs"/>
+            <use href="#torso"/>
+            <g transform="translate(0 8) rotate(5 500 278)">
+              <use href="#head"/>
+              <g class="face">
+                <path class="f-eye ln-2" d="M471 224 C477 217 489 216 496 221 C492 229 478 230 471 224 Z"/>
+                <path class="f-eye ln-2" d="M529 224 C523 217 511 216 504 221 C508 229 522 230 529 224 Z"/>
+                <ellipse class="f-iris" cx="484" cy="224" rx="5" ry="5"/>
+                <ellipse class="f-iris" cx="516" cy="224" rx="5" ry="5"/>
+                <ellipse class="f-ink" cx="484" cy="224" rx="2" ry="2.6"/>
+                <ellipse class="f-ink" cx="516" cy="224" rx="2" ry="2.6"/>
+                <path class="lash lash--heavy" d="M469 222 C476 214 490 213 498 219 M531 222 C524 214 510 213 502 219"/>
+                <path class="brow" d="M471 198 L495 196 M529 198 L505 196"/>
+                <path class="ln-2" d="M494 260 L509 260"/>
+              </g>
+            </g>
+            <g class="arm">
+              <path class="limb-out" d="M412 364 Q392 418 428 462"/>
+              <path class="limb-out" d="M588 364 Q608 418 572 462"/>
+              <path class="limb-sleeve" d="M412 364 Q392 418 428 462"/>
+              <path class="limb-sleeve" d="M588 364 Q608 418 572 462"/>
+            </g>
+            <use href="#folder" transform="translate(500 476) rotate(-2) scale(.94)"/>
+            <use href="#hand" transform="translate(426 472) rotate(-12) scale(.92)"/>
+            <use href="#hand" transform="translate(574 470) rotate(12) scale(.92)"/>
+          </g>
+
+          <!-- POSE 3 · hands in pockets, weight on one hip -->
+          <g class="pose pose-3" transform="translate(-9 0) rotate(1.4 500 620)">
+            <use href="#legs"/>
+            <use href="#torso"/>
+            <g class="arm">
+              <path class="limb-out" d="M412 364 Q388 424 412 502"/>
+              <path class="limb-out" d="M588 364 Q612 424 588 502"/>
+              <path class="limb-sleeve" d="M412 364 Q388 424 412 502"/>
+              <path class="limb-sleeve" d="M588 364 Q612 424 588 502"/>
+            </g>
+            <g transform="rotate(6 500 278)">
+              <use href="#head"/>
+              <g class="face">
+                <path class="f-eye ln-2" d="M470 222 C476 213 489 211 496 218 C492 228 477 230 470 222 Z"/>
+                <path class="f-eye ln-2" d="M530 222 C524 213 511 211 504 218 C508 228 523 230 530 222 Z"/>
+                <ellipse class="f-iris" cx="485" cy="221" rx="5.4" ry="6.2"/>
+                <ellipse class="f-iris" cx="517" cy="221" rx="5.4" ry="6.2"/>
+                <ellipse class="f-ink" cx="485" cy="221" rx="2.1" ry="2.9"/>
+                <ellipse class="f-ink" cx="517" cy="221" rx="2.1" ry="2.9"/>
+                <circle class="f-paper" cx="482" cy="217" r="1.7"/>
+                <circle class="f-paper" cx="514" cy="217" r="1.7"/>
+                <path class="lash" d="M467 220 C475 210 490 208 499 216 M533 220 C525 210 510 208 501 216"/>
+                <path class="brow" d="M470 193 L495 190 M530 193 L505 190"/>
+                <path class="ln-2" d="M492 258 C498 262 505 261 510 256"/>
+              </g>
+            </g>
+          </g>
+
+          <!-- POSE 4 · straightening the tie -->
+          <g class="pose pose-4">
+            <use href="#legs"/>
+            <use href="#torso"/>
+            <g class="arm">
+              <path class="limb-out" d="M412 364 Q390 424 414 500"/>
+              <path class="limb-out" d="M588 364 Q616 388 610 418 Q568 396 524 360"/>
+              <path class="limb-sleeve" d="M412 364 Q390 424 414 500"/>
+              <path class="limb-sleeve" d="M588 364 Q616 388 610 418 Q568 396 524 360"/>
+            </g>
+            <g transform="rotate(3 500 278)">
+              <use href="#head"/>
+              <g class="face">
+                <path class="f-eye ln-2" d="M470 220 C476 211 489 209 496 216 C492 227 477 228 470 220 Z"/>
+                <path class="f-eye ln-2" d="M530 220 C524 211 511 209 504 216 C508 227 523 228 530 220 Z"/>
+                <ellipse class="f-iris" cx="482" cy="219" rx="5.4" ry="6.4"/>
+                <ellipse class="f-iris" cx="514" cy="219" rx="5.4" ry="6.4"/>
+                <ellipse class="f-ink" cx="482" cy="219" rx="2.1" ry="3"/>
+                <ellipse class="f-ink" cx="514" cy="219" rx="2.1" ry="3"/>
+                <circle class="f-paper" cx="479" cy="215" r="1.7"/>
+                <circle class="f-paper" cx="511" cy="215" r="1.7"/>
+                <path class="lash" d="M467 218 C475 208 490 206 499 214 M533 218 C525 208 510 206 501 214"/>
+                <path class="brow" d="M470 191 L495 189 M530 192 L505 189"/>
+                <path class="ln-2" d="M492 258 L508 256"/>
+              </g>
+            </g>
+            <use href="#hand" transform="translate(518 356) rotate(-30) scale(.92)"/>
+            <g class="beat"><path class="shine-line" d="M614 296 L622 262 M632 306 L646 280 M600 276 L602 248"/></g>
+          </g>
+        </g>
+
+
+        <!-- ── LAYER 3 · FOREGROUND CLUTTER ─────────────────────── -->
+        <g class="fg">
+          <!-- loose paper on the floor at his feet -->
+          <g class="floor-paper">
+            <path class="f-paper ln-2" d="M366 630 L438 618 L452 654 L378 668 Z"/>
+            <path class="ln-thin" d="M382 636 L432 630 M384 646 L428 640"/>
+            <path class="f-paper ln-2" d="M566 646 L642 632 L654 664 L578 680 Z"/>
+            <path class="ln-thin" d="M582 652 L634 645 M584 662 L628 655"/>
+          </g>
+
+          <!-- left: stacked binders + pen pot, drawn big because the lens is wide -->
+          <g class="stack-left">
+            <path class="f-blue ln-3" d="M-10 560 L184 528 L196 576 L2 612 Z"/>
+            <path class="f-paper ln-2" d="M-10 612 L196 576 L200 596 L-8 634 Z"/>
+            <path class="f-blue-d ln-3" d="M-8 634 L200 596 L208 646 L-6 690 Z"/>
+            <g class="rings">
+              <path d="M22 568 v26 M52 563 v26 M82 558 v26 M112 553 v26 M142 548 v26"/>
+              <path d="M26 644 v30 M58 638 v30 M90 632 v30 M122 626 v30 M154 620 v30"/>
+            </g>
+            <path class="clip" d="M118 520 q18 -10 22 6 q3 14 -12 16 q-14 2 -14 -12 q0 -12 14 -14"/>
+            <!-- pen pot -->
+            <path class="f-ink" d="M212 596 L272 590 L266 672 L216 676 Z"/>
+            <path class="f-vest ln-3" d="M216 600 L268 594 L262 668 L220 672 Z"/>
+            <path class="ln-3" d="M232 592 L224 528 M246 590 L252 522 M258 590 L272 536"/>
+            <use href="#pen" transform="translate(238 552) rotate(-6) scale(1.05)"/>
+          </g>
+
+          <!-- right: desk corner with coffee, an open file and a monitor edge -->
+          <g class="desk-right">
+            <path class="f-desk ln-3" d="M636 552 Q828 512 1012 528 L1012 690 L612 690 Z"/>
+            <path class="ln-2" d="M636 566 Q828 526 1012 542"/>
+            <path class="hatch-fill" d="M636 566 Q828 526 1012 542 L1012 690 L618 690 Z"/>
+            <path class="f-paper ln-2" d="M666 596 L790 574 L816 630 L692 656 Z"/>
+            <path class="ln-thin" d="M694 606 L776 592 M700 618 L784 604 M708 630 L768 620"/>
+            <path class="f-blue ln-2" d="M656 586 L700 578 L724 642 L678 652 Z"/>
+            <!-- mug -->
+            <path class="f-paper ln-3" d="M856 568 L916 562 L910 626 Q884 638 862 624 Z"/>
+            <path class="f-none ln-3" d="M914 578 q22 -4 20 16 q-2 18 -22 14"/>
+            <path class="f-ink" d="M858 578 L912 572 L910 588 Q882 596 860 586 Z"/>
+            <g class="steam"><path d="M872 548 q10 -12 0 -24 q-8 -10 2 -20"/><path d="M896 544 q10 -12 0 -24 q-8 -10 2 -18"/></g>
+            <!-- clips -->
+            <path class="clip" d="M818 656 q20 -12 24 6 q4 16 -14 18 q-16 2 -16 -14 q0 -14 16 -16"/>
+            <path class="clip" d="M948 622 q20 -12 24 6 q4 16 -14 18 q-16 2 -16 -14 q0 -14 16 -16"/>
+            <!-- monitor, cropped by the frame -->
+            <path class="f-ink" d="M946 330 L1010 322 L1010 540 L946 532 Z"/>
+            <path class="f-screen" d="M956 342 L1010 336 L1010 526 L956 520 Z"/>
+            <path class="scan" d="M964 372 H1010 M964 398 H1010 M964 424 H1010 M964 450 H1010"/>
+            <path class="scan-hot" d="M964 480 H1006"/>
+          </g>
+        </g>
+
+
+        <!-- ── LAYER 4 · PRINT FINISH ───────────────────────────── -->
+        <rect class="tone" x="0" y="0" width="1000" height="680" fill="url(#dots-sm)"/>
+        <rect class="grain" x="0" y="0" width="1000" height="680" filter="url(#grain)"/>
+        <rect class="vignette" x="0" y="0" width="1000" height="680" fill="url(#vig)"/>
+      </svg>
+
+
+      <!-- ─── 4b. THE ORBIT ───────────────────────────────────────
+           Five links riding a tilted ellipse around him.
+           [EDIT] your URLs live right here.
+           Speed + size + radius are all in style.css → "6. ORBIT".
+      ──────────────────────────────────────────────────────────── -->
+      <nav class="orbit" aria-label="Elsewhere">
+        <a class="orb" style="--i:0" href="https://substack.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
+          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-substack"/></svg></span><span class="orb__label">Substack</span></span>
+          <span class="u-hidden">Substack</span>
+        </a>
+        <a class="orb" style="--i:1" href="https://www.youtube.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
+          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-youtube"/></svg></span><span class="orb__label">YouTube</span></span>
+          <span class="u-hidden">YouTube</span>
+        </a>
+        <a class="orb orb--own" style="--i:2" href="https://fashionxd.com/blog/" target="_blank" rel="noopener noreferrer">
+          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fashionxd"/></svg></span><span class="orb__label">FashionXD</span></span>
+          <span class="u-hidden">FashionXD</span>
+        </a>
+        <a class="orb" style="--i:3" href="https://www.linkedin.com/in/ghoulstuffs/" target="_blank" rel="noopener noreferrer">
+          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg></span><span class="orb__label">LinkedIn</span></span>
+          <span class="u-hidden">LinkedIn</span>
+        </a>
+        <a class="orb" style="--i:4" href="https://x.com/GhoulStuffs" target="_blank" rel="noopener noreferrer">
+          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg></span><span class="orb__label">X</span></span>
+          <span class="u-hidden">X</span>
+        </a>
+      </nav>
+
+      <!-- ─── 4c. SOUND ───────────────────────────────────────────
+           Browsers block sound before a visitor interacts, so the
+           track arms itself and starts on their first click or tap.
+           Everything about it lives in sound.js.
+      ──────────────────────────────────────────────────────────── -->
+      <button class="sound" id="sound" type="button" aria-pressed="false">
+        <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="sound__text">Sound off</span>
+      </button>
+
+      <!-- panel caption, like a figure label in a manga volume -->
+      <p class="plate"><span>Fig. 01</span> the ghoul takes a desk job</p>
+    </div>
+  </main>
+
+
+  <!-- ══ 5. FOOTER ══ -->
+  <footer class="footer">
+    <p class="footer__note">Hand-drawn in SVG. Music generated live in the browser.</p>
+    <p class="footer__note footer__note--dim">Original character &amp; artwork &mdash; not affiliated with any existing series.</p>
+  </footer>
+
+</div>
+
+<script src="sound.js" defer></script>
+</body>
+</html>
