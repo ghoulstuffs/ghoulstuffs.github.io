@@ -3,7 +3,7 @@
     --bg-2: #141414;
     --text: #f5f5f5;
     --text-dim: #888888;
-    --accent: #a855f7; /* Makima / Persona style purple */
+    --accent: #a855f7; 
     --accent-lo: #d8b4fe;
     --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
     --orbit-speed: 40s;
@@ -26,7 +26,7 @@ body {
 
 .frame {
     container-type: inline-size; position: relative; aspect-ratio: 16 / 9;
-    overflow: hidden; border-radius: 8px; background: var(--bg-2); box-shadow: 0 40px 90px -40px #000;
+    overflow: hidden; border-radius: 8px; background: #111; box-shadow: 0 40px 90px -40px #000;
 }
 
 /* Manga Scene */
@@ -37,38 +37,21 @@ body {
 .bg-manga-dots {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
-    background-size: 16px 16px; opacity: 0.4;
+    background-size: 16px 16px; opacity: 0.4; pointer-events: none;
 }
 .bg-ink-lines {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: repeating-linear-gradient(45deg, rgba(0,0,0,0.8) 0px, rgba(0,0,0,0.8) 2px, transparent 2px, transparent 20px);
+    pointer-events: none;
 }
 
-/* The CSS Crest (Geometric Logo) */
-.character-crest {
-    position: relative; z-index: 10; width: 120px; height: 160px;
-}
-.crest-eyes {
-    position: relative; width: 100%; height: 100px; display: flex; justify-content: center; align-items: center; gap: 40px;
-}
-.eye {
-    position: relative; width: 14px; height: 28px; background: #111; border-radius: 50%;
-    border-top: 8px solid #333; border-bottom: 8px solid #333;
-}
-.eye .purple-glow {
-    position: absolute; top: 4px; left: 2px; width: 10px; height: 20px; border-radius: 50%;
-    background: #a855f7; box-shadow: 0 0 12px #a855f7, 0 0 25px #6b21a8;
-}
-.crest-tie {
-    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 24px; height: 80px; background: #111;
-    border-top: 10px solid #f0f0f0; /* White collar */
-    border-radius: 0 0 4px 4px;
-}
-
-/* The Optional Image (If you upload a PNG to GitHub) */
+/* The character image */
 .character-asset {
-    position: relative; z-index: 10; max-height: 90%; width: auto; object-fit: contain;
+    position: relative; z-index: 10; 
+    max-height: 92%; max-width: 95%; 
+    width: auto; height: auto; 
+    object-fit: contain;
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
 }
 
 /* Orbit */
