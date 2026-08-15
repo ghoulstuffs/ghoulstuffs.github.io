@@ -1,612 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--
-═══════════════════════════════════════════════════════════════════════
-  ghoulstuffs.github.io
-
-  FILES        index.html · style.css · sound.js
-  STRUCTURE    1  head — fonts + meta
-               2  #icons — the five social glyphs
-               3  .masthead — wordmark
-               4  .frame — the illustration
-                    .scene   one SVG, built in depth order:
-                             far → window, back wall, board
-                             mid → floor, chair, desk
-                             cast → 4 poses that cross-fade
-                             near → foreground desk (blurred)
-               5  .sound — music toggle (logic in sound.js)
-               6  .footer
-
-  Look for  [EDIT]  to find the things you'll want to change.
-═══════════════════════════════════════════════════════════════════════
--->
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- [EDIT] title + description -->
-<title>ghoulstuffs</title>
-<meta name="description" content="Mansi — SEO content strategist, writer and prompt engineer.">
-<meta name="theme-color" content="#0a0910">
-<meta property="og:title" content="ghoulstuffs">
-<meta property="og:type" content="website">
-
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0910'/><circle cx='16' cy='16' r='9' fill='%238b6cff'/></svg>">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ghoulstuffs</title>
+    <meta name="description" content="Mansi — SEO content strategist, writer and prompt engineer.">
+    <meta name="theme-color" content="#111">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23111'/><circle cx='16' cy='16' r='9' fill='%23a855f7'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="i-substack" viewBox="0 0 24 24"><path d="M3 3.6h18v3.1H3zM3 9.3h18v3.1H3zM3 15h18v6.4l-9-4.6-9 4.6z"/></symbol>
+        <symbol id="i-youtube" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6.6 4.4h10.8a4.2 4.2 0 0 1 4.2 4.2v6.8a4.2 4.2 0 0 1-4.2 4.2H6.6a4.2 4.2 0 0 1-4.2-4.2V8.6a4.2 4.2 0 0 1 4.2-4.2Zm3.6 3.9v7.4l6.4-3.7Z"/></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M3.1 8.9h3.7V21H3.1zM4.95 2.6a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4ZM9.6 8.9h3.5v1.8a3.9 3.9 0 0 1 3.5-1.9c3 0 4.3 1.9 4.3 5V21h-3.7v-6c0-1.6-.6-2.6-2-2.6s-2.1 1-2.1 2.6v6H9.6Z"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M3 2.8h5.4l4.3 5.9 5-5.9h2.9l-6.5 7.6L21.4 21H16l-4.6-6.3L6 21H3.1l7-8.2Zm3.1 1.9 10 14.4h1.9L8 4.7Z"/></symbol>
+        <symbol id="i-fashionxd" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 21h13.4v4.6h-8v4.3h6.9v4.6h-6.9V43H12z"/>
+            <path d="M24.6 21h5.7l4.2 6.6 4-6.6h5.8l-7 10.8L44.6 43h-5.9l-4.3-6.9L30.2 43h-5.9l7.2-11.2z"/>
+            <path d="M41.6 21h5.2c6.6 0 11 4.3 11 11s-4.4 11-11 11h-5.2zm5.3 4.8v12.4h.4c3.5 0 5.6-2.3 5.6-6.2s-2.1-6.2-5.6-6.2z"/>
+        </symbol>
+    </svg>
 
-<!-- ══ 2 · ICONS ══ -->
-<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="i-substack" viewBox="0 0 24 24">
-    <path d="M3 3.6h18v3.1H3zM3 9.3h18v3.1H3zM3 15h18v6.4l-9-4.6-9 4.6z"/>
-  </symbol>
-  <symbol id="i-youtube" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" d="M6.6 4.4h10.8a4.2 4.2 0 0 1 4.2 4.2v6.8a4.2 4.2 0 0 1-4.2 4.2H6.6a4.2 4.2 0 0 1-4.2-4.2V8.6a4.2 4.2 0 0 1 4.2-4.2Zm3.6 3.9v7.4l6.4-3.7Z"/>
-  </symbol>
-  <symbol id="i-linkedin" viewBox="0 0 24 24">
-    <path d="M3.1 8.9h3.7V21H3.1zM4.95 2.6a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4ZM9.6 8.9h3.5v1.8a3.9 3.9 0 0 1 3.5-1.9c3 0 4.3 1.9 4.3 5V21h-3.7v-6c0-1.6-.6-2.6-2-2.6s-2.1 1-2.1 2.6v6H9.6Z"/>
-  </symbol>
-  <symbol id="i-x" viewBox="0 0 24 24">
-    <path d="M3 2.8h5.4l4.3 5.9 5-5.9h2.9l-6.5 7.6L21.4 21H16l-4.6-6.3L6 21H3.1l7-8.2Zm3.1 1.9 10 14.4h1.9L8 4.7Z"/>
-  </symbol>
-  <!-- FashionXD: FXD inside the double ring, from the logo -->
-  <symbol id="i-fashionxd" viewBox="0 0 64 64">
-    <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="2"/>
-    <circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="2"/>
-    <path d="M12 21h13.4v4.6h-8v4.3h6.9v4.6h-6.9V43H12z"/>
-    <path d="M24.6 21h5.7l4.2 6.6 4-6.6h5.8l-7 10.8L44.6 43h-5.9l-4.3-6.9L30.2 43h-5.9l7.2-11.2z"/>
-    <path d="M41.6 21h5.2c6.6 0 11 4.3 11 11s-4.4 11-11 11h-5.2zm5.3 4.8v12.4h.4c3.5 0 5.6-2.3 5.6-6.2s-2.1-6.2-5.6-6.2z"/>
-  </symbol>
-</svg>
+    <div class="page">
+        <header class="masthead">
+            <h1 class="wordmark">ghoulstuffs</h1>
+        </header>
 
+        <main>
+            <div class="frame">
+                <!-- Manga Panel Background -->
+                <div class="scene-wrapper">
+                    <!-- Optional: If you UPLOAD a transparent PNG, uncomment the line below -->
+                    <!-- <img src="your-character-image.png" class="character-asset" alt="Character"> -->
+                    
+                    <!-- If you do NOT have a PNG, use this cool CSS geometric crest (Eyes + Tie) -->
+                    <div class="character-crest">
+                        <div class="crest-eyes">
+                            <div class="eye left"><div class="purple-glow"></div></div>
+                            <div class="eye right"><div class="purple-glow"></div></div>
+                        </div>
+                        <div class="crest-tie"></div>
+                    </div>
+                    
+                    <!-- Manga Ink Background Layers -->
+                    <div class="bg-ink-lines"></div>
+                    <div class="bg-manga-dots"></div>
+                </div>
 
-<div class="page">
+                <!-- SOCIAL ORBS -->
+                <nav class="orbit" aria-label="Elsewhere">
+                    <a class="orb" style="--i:0" href="https://substack.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
+                        <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24"><use href="#i-substack"/></svg></span><span class="orb__label">Substack</span></span>
+                        <span class="u-hide">Substack</span>
+                    </a>
+                    <a class="orb" style="--i:1" href="https://www.youtube.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
+                        <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24"><use href="#i-youtube"/></svg></span><span class="orb__label">YouTube</span></span>
+                        <span class="u-hide">YouTube</span>
+                    </a>
+                    <a class="orb orb--own" style="--i:2" href="https://fashionxd.com/blog/" target="_blank" rel="noopener noreferrer">
+                        <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 64 64"><use href="#i-fashionxd"/></svg></span><span class="orb__label">FashionXD</span></span>
+                        <span class="u-hide">FashionXD</span>
+                    </a>
+                    <a class="orb" style="--i:3" href="https://www.linkedin.com/in/ghoulstuffs/" target="_blank" rel="noopener noreferrer">
+                        <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24"><use href="#i-linkedin"/></svg></span><span class="orb__label">LinkedIn</span></span>
+                        <span class="u-hide">LinkedIn</span>
+                    </a>
+                    <a class="orb" style="--i:4" href="https://x.com/GhoulStuffs" target="_blank" rel="noopener noreferrer">
+                        <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg></span><span class="orb__label">X</span></span>
+                        <span class="u-hide">X</span>
+                    </a>
+                </nav>
 
-  <!-- ══ 3 · MASTHEAD ══ [EDIT] your name ══ -->
-  <header class="masthead">
-    <h1 class="wordmark">ghoulstuffs</h1>
-  </header>
+                <!-- SOUND TOGGLE -->
+                <button class="sound" id="sound" type="button" aria-pressed="false">
+                    <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                    <span class="sound__text">Sound off</span>
+                </button>
+            </div>
+        </main>
 
-
-  <!-- ══ 4 · THE PICTURE ══ -->
-  <main>
-    <div class="frame">
-
-      <svg class="scene" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice"
-           role="img" aria-labelledby="ttl dsc" xmlns="http://www.w3.org/2000/svg">
-        <title id="ttl">An office at dusk</title>
-        <desc id="dsc">A dark-haired man in a white shirt and black tie stands in an office at dusk, lit from a tall window. He shifts between standing, folding his arms, pushing his hair back, and reading a page.</desc>
-
-        <defs>
-          <!-- ── LIGHT ──────────────────────────────────────────────
-               One light source: the window, low and to the left.
-               Every gradient below points the same way. That single
-               decision is what stops the drawing looking flat.
-          ──────────────────────────────────────────────────────── -->
-          <linearGradient id="sky" x1="0" y1="0" x2=".25" y2="1">
-            <stop offset="0"   stop-color="#3b3a72"/>
-            <stop offset=".34" stop-color="#7b6aa8"/>
-            <stop offset=".62" stop-color="#d18f8f"/>
-            <stop offset=".84" stop-color="#f5b076"/>
-            <stop offset="1"   stop-color="#ffd7a2"/>
-          </linearGradient>
-          <radialGradient id="vigg" cx=".5" cy=".46" r=".76">
-            <stop offset=".5" stop-color="#000" stop-opacity="0"/>
-            <stop offset="1"  stop-color="#000" stop-opacity=".62"/>
-          </radialGradient>
-          <radialGradient id="sun" cx=".34" cy=".8" r=".55">
-            <stop offset="0" stop-color="#fff3d6" stop-opacity=".95"/>
-            <stop offset="1" stop-color="#fff3d6" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="backwall" x1="0" y1="0" x2="1" y2=".4">
-            <stop offset="0"   stop-color="#5d5480"/>
-            <stop offset=".45" stop-color="#3b3557"/>
-            <stop offset="1"   stop-color="#241f39"/>
-          </linearGradient>
-          <linearGradient id="rightwall" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#2c2742"/>
-            <stop offset="1" stop-color="#171426"/>
-          </linearGradient>
-          <linearGradient id="leftwall" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#191629"/>
-            <stop offset="1" stop-color="#332c4d"/>
-          </linearGradient>
-          <linearGradient id="ceiling" x1="0" y1="0" x2=".3" y2="1">
-            <stop offset="0" stop-color="#100e1c"/>
-            <stop offset="1" stop-color="#2b2542"/>
-          </linearGradient>
-          <linearGradient id="floor" x1=".15" y1="0" x2=".8" y2="1">
-            <stop offset="0"   stop-color="#4a4166"/>
-            <stop offset=".45" stop-color="#241f38"/>
-            <stop offset="1"   stop-color="#100d1b"/>
-          </linearGradient>
-          <linearGradient id="pool" x1="0" y1="0" x2=".5" y2="1">
-            <stop offset="0"   stop-color="#ffc98e" stop-opacity=".5"/>
-            <stop offset="1"   stop-color="#ffc98e" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="shaft" x1="0" y1="0" x2=".7" y2="1">
-            <stop offset="0" stop-color="#ffd9a8" stop-opacity=".3"/>
-            <stop offset="1" stop-color="#ffd9a8" stop-opacity="0"/>
-          </linearGradient>
-
-          <!-- ── THE CHARACTER ─────────────────────────────────── -->
-          <linearGradient id="skin" x1="0" y1="0" x2="1" y2=".5">
-            <stop offset="0"   stop-color="#ffd9b8"/>
-            <stop offset=".5"  stop-color="#e5b198"/>
-            <stop offset="1"   stop-color="#9d7377"/>
-          </linearGradient>
-          <linearGradient id="shirt" x1="0" y1="0" x2=".9" y2=".5">
-            <stop offset="0"   stop-color="#ffe6c8"/>
-            <stop offset=".26" stop-color="#ded4dd"/>
-            <stop offset=".64" stop-color="#8f87ae"/>
-            <stop offset="1"   stop-color="#544d78"/>
-          </linearGradient>
-          <linearGradient id="hair" x1="0" y1="0" x2=".85" y2=".7">
-            <stop offset="0"   stop-color="#3a3654"/>
-            <stop offset=".45" stop-color="#1d1a2c"/>
-            <stop offset="1"   stop-color="#0d0b16"/>
-          </linearGradient>
-          <linearGradient id="gloss" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0"   stop-color="#9c93cc" stop-opacity=".85"/>
-            <stop offset="1"   stop-color="#6d64a0" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="trouser" x1="0" y1="0" x2=".9" y2=".4">
-            <stop offset="0"   stop-color="#4a4160"/>
-            <stop offset=".45" stop-color="#221f33"/>
-            <stop offset="1"   stop-color="#100e18"/>
-          </linearGradient>
-          <linearGradient id="tie" x1="0" y1="0" x2="1" y2=".3">
-            <stop offset="0" stop-color="#2a2740"/>
-            <stop offset="1" stop-color="#0c0b14"/>
-          </linearGradient>
-          <radialGradient id="iris" cx=".42" cy=".68" r=".72">
-            <stop offset="0"   stop-color="#ad92ff"/>
-            <stop offset=".55" stop-color="#7458d8"/>
-            <stop offset=".9"  stop-color="#513b95"/>
-            <stop offset="1"   stop-color="#3e2c74"/>
-          </radialGradient>
-          <linearGradient id="lidshade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0"   stop-color="#1a1130" stop-opacity=".55"/>
-            <stop offset=".55" stop-color="#1a1130" stop-opacity="0"/>
-          </linearGradient>
-          <linearGradient id="desk" x1="0" y1="0" x2=".6" y2="1">
-            <stop offset="0" stop-color="#4b4166"/>
-            <stop offset="1" stop-color="#191527"/>
-          </linearGradient>
-
-          <!-- ── DEPTH ─────────────────────────────────────────────
-               Blur is what tells the eye "this is near, that is far".
-          ──────────────────────────────────────────────────────── -->
-          <filter id="near" x="-12%" y="-12%" width="124%" height="124%">
-            <feGaussianBlur stdDeviation="3.4"/>
-          </filter>
-          <filter id="far" x="-8%" y="-8%" width="116%" height="116%">
-            <feGaussianBlur stdDeviation="1.1"/>
-          </filter>
-          <filter id="bloom" x="-45%" y="-45%" width="190%" height="190%">
-            <feGaussianBlur stdDeviation="26"/>
-          </filter>
-          <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="7"/>
-          </filter>
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="3" stitchTiles="stitch"/>
-            <feColorMatrix type="saturate" values="0"/>
-          </filter>
-
-          <clipPath id="eyeclip"><path d="M463 171 C465 163 474 159 485 159 C494 159 500 163 501 169 C500 176 490 180 480 180 C470 180 464 177 463 171 Z"/></clipPath>
-          <clipPath id="room"><rect x="0" y="0" width="1000" height="600"/></clipPath>
-
-          <!-- one eye, drawn large the way anime eyes actually are.
-               The other is this one mirrored and slightly narrowed,
-               which is what sells the three-quarter turn. -->
-          <g id="eye">
-            <path class="eyewhite" d="M463 171 C465 163 474 159 485 159 C494 159 500 163 501 169 C500 176 490 180 480 180 C470 180 464 177 463 171 Z"/>
-            <g clip-path="url(#eyeclip)">
-              <ellipse class="iris" cx="481" cy="169" rx="8.6" ry="11.6"/>
-              <ellipse class="pupil" cx="481" cy="170" rx="4.2" ry="6.2"/>
-              <ellipse class="lidshade" cx="481" cy="154" rx="18" ry="12"/>
-              <circle class="spark" cx="476" cy="163" r="3"/>
-              <circle class="spark2" cx="487" cy="175" r="1.7"/>
-            </g>
-            <path class="lashline" d="M463 169 C466 161 474 157 486 157 C495 157 501 161 503 166"/>
-            <path class="lash" d="M503 165 C503 158 500 152 495 148 C503 150 509 157 510 165 Z"/>
-            <path class="brow" d="M458 132 C470 125 486 125 498 132 L497 138 C486 132 471 132 460 139 Z"/>
-          </g>
-
-          <!-- pinned things. Six kinds, so the board isn't a grid of
-               identical rectangles. -->
-          <g id="p-photo">
-            <rect x="-30" y="-22" width="60" height="44" rx="1" fill="#c9c2d6"/>
-            <rect x="-27" y="-19" width="54" height="32" fill="#4a4260"/>
-            <path d="M-27 13 L-12 -4 L-2 6 L9 -9 L27 13 Z" fill="#6d6390"/>
-            <circle cx="14" cy="-11" r="4" fill="#8d83b0"/>
-          </g>
-          <g id="p-doc">
-            <rect x="-24" y="-32" width="48" height="64" fill="#d8d2e2"/>
-            <rect x="-17" y="-24" width="30" height="4" fill="#6a6285"/>
-            <rect x="-17" y="-14" width="34" height="2.4" fill="#8d86a6"/>
-            <rect x="-17" y="-8"  width="28" height="2.4" fill="#8d86a6"/>
-            <rect x="-17" y="-2"  width="34" height="2.4" fill="#8d86a6"/>
-            <rect x="-17" y="6"   width="20" height="2.4" fill="#8d86a6"/>
-            <rect x="-17" y="14"  width="34" height="12" fill="#a49dbb"/>
-          </g>
-          <g id="p-sticky">
-            <rect x="-19" y="-19" width="38" height="38" fill="#e8c98a"/>
-            <path d="M-19 19 L19 19 L19 12 Q0 22 -19 12 Z" fill="#d0ae6d"/>
-            <rect x="-12" y="-11" width="24" height="2.6" fill="#9c7f45"/>
-            <rect x="-12" y="-4"  width="18" height="2.6" fill="#9c7f45"/>
-            <rect x="-12" y="3"   width="22" height="2.6" fill="#9c7f45"/>
-          </g>
-          <g id="p-torn">
-            <path d="M-26 -16 L26 -20 L28 15 L-24 19 Z" fill="#e3ddec"/>
-            <path d="M-26 -16 L-22 -12 L-26 -8 L-22 -4 L-26 0 L-24 19 L-24 -16 Z" fill="#c4bcd6"/>
-            <rect x="-16" y="-9" width="32" height="2.6" fill="#8d86a6"/>
-            <rect x="-16" y="-2" width="26" height="2.6" fill="#8d86a6"/>
-            <rect x="-16" y="5"  width="30" height="2.6" fill="#8d86a6"/>
-          </g>
-          <g id="p-strip">
-            <rect x="-9" y="-30" width="18" height="60" fill="#2a2540"/>
-            <rect x="-6" y="-26" width="12" height="11" fill="#7d729e"/>
-            <rect x="-6" y="-12" width="12" height="11" fill="#9c8fbf"/>
-            <rect x="-6" y="2"   width="12" height="11" fill="#6a6088"/>
-            <rect x="-6" y="16"  width="12" height="11" fill="#8b80ad"/>
-          </g>
-          <g id="p-card">
-            <rect x="-28" y="-17" width="56" height="34" fill="#cfc8de"/>
-            <rect x="-22" y="-10" width="24" height="2.6" fill="#7b7398"/>
-            <rect x="-22" y="-3"  width="34" height="2.6" fill="#7b7398"/>
-            <rect x="-22" y="4"   width="18" height="2.6" fill="#7b7398"/>
-            <path d="M6 -12 L22 10 M22 -12 L6 10" stroke="#b0537a" stroke-width="2.4" fill="none"/>
-          </g>
-          <circle id="pin" r="3.4" fill="#c8b4ff"/>
-
-          <!-- ── FIGURE PARTS ───────────────────────────────────── -->
-          <g id="head-back">
-            <path class="skin" d="M480 194 L520 194 L522 236 L478 236 Z"/>
-            <path class="neckshade" d="M481 200 L521 200 L521 226 Q501 242 481 224 Z"/>
-            <path class="hair" d="M442 208 C432 160 438 112 468 96 C488 86 512 86 532 96 C562 112 568 160 558 208 L549 174 L541 202 L533 164 L524 190 L476 190 L467 164 L459 202 L451 174 Z"/>
-            <path class="skin" d="M460 160 C458 126 474 108 500 108 C526 108 542 126 540 160 C538 179 529 193 515 201 C509 207 504 210 500 211 C496 210 491 207 485 201 C471 193 462 179 460 160 Z"/>
-            <path class="skin" d="M460 156 C452 153 449 164 453 173 C455 179 460 181 463 177"/>
-            <path class="skin" d="M540 156 C548 153 551 164 547 173 C545 179 540 181 537 177"/>
-          </g>
-
-          <g id="head-front">
-            <g class="hair">
-              <path d="M448 158 C444 124 458 100 480 93 C502 87 524 93 538 108 C550 121 554 140 552 158 C548 146 540 150 534 168 C528 148 518 146 510 162 C504 142 492 144 484 160 C476 140 462 142 453 160 Z"/>
-              <path d="M494 94 C506 95 517 99 524 104 C528 118 528 134 522 150 C517 160 512 165 508 167 C506 152 502 136 496 124 Z"/>
-              <path d="M449 148 C444 168 442 188 443 204 C449 194 454 184 457 174 C457 164 456 155 456 146 Z"/>
-              <path d="M551 148 C556 168 558 188 557 204 C551 194 546 184 543 174 C543 164 544 155 544 146 Z"/>
-            </g>
-            <g class="gloss">
-              <path d="M464 126 C473 111 486 102 500 100 L498 110 C487 113 477 120 470 132 Z"/>
-              <path d="M512 102 C524 106 533 114 539 124 L532 128 C526 119 519 113 510 110 Z"/>
-            </g>
-            <path class="rim" d="M442 208 C432 160 438 112 468 96"/>
-            <path class="nose" d="M504 178 C508 183 511 183 513 180"/>
-            <path class="mouth" d="M502 195 L513 194"/>
-          </g>
-
-          <g id="torso">
-            <path class="shirt" d="M500 228 C490 228 481 232 472 238 C460 245 449 253 442 263 C435 273 432 286 431 300 L434 352 L452 412 L455 468 L545 468 L548 412 L566 352 L569 300 C568 286 565 273 558 263 C551 253 540 245 528 238 C519 232 510 228 500 228 Z"/>
-            <g class="fold">
-              <path d="M452 292 C458 322 456 356 450 386"/>
-              <path d="M548 294 C542 324 544 358 550 388"/>
-              <path d="M450 396 C472 408 528 408 550 396"/>
-              <path d="M456 440 C474 448 526 448 544 440"/>
-              <path d="M476 320 C481 340 481 362 477 382"/>
-            </g>
-            <path class="shirtshade" d="M528 238 C540 245 551 253 558 263 C565 273 568 286 569 300 L566 352 L548 412 L545 468 L508 468 L518 290 Z"/>
-            <path class="shirt" d="M500 232 L472 241 L487 278 L500 250 L513 278 L528 241 Z"/>
-            <path class="collarline" d="M472 241 L487 278 M528 241 L513 278"/>
-            <path class="tie" d="M500 248 L490 262 L500 278 L510 262 Z"/>
-            <path class="tie" d="M493 278 L507 278 L513 408 L500 424 L487 408 Z"/>
-            <path class="tieshine" d="M496 282 L500 282 L504 404 L500 412 Z"/>
-            <path class="belt" d="M453 462 L548 462 L547 484 L455 484 Z"/>
-            <rect class="buckle" x="490" y="464" width="22" height="18" rx="2"/>
-            <path class="trouser" d="M455 480 L547 480 L566 600 L436 600 Z"/>
-            <path class="crease" d="M478 486 L470 600 M524 486 L532 600"/>
-            <path class="rim2" d="M472 238 C460 245 449 253 442 263 C435 273 432 286 431 300 L434 352 L452 412 L455 468"/>
-          </g>
-
-          <!-- sleeves and hands are drawn per pose; these are the parts
-               they share -->
-          <g id="hand">
-            <path class="skin" d="M-13 -10 C-18 -3 -17 8 -9 13 C0 18 12 15 16 6 C19 -2 15 -11 8 -14 C0 -17 -8 -16 -13 -10 Z"/>
-            <path class="handline" d="M-5 -12 L-3 3 M3 -14 L4 1 M10 -12 L9 -3"/>
-          </g>
-          <g id="mug">
-            <path d="M-15 -14 L15 -14 L12 17 C4 22 -6 22 -12 17 Z" fill="#332c4a"/>
-            <path d="M-15 -14 L15 -14 L14 -6 L-14 -6 Z" fill="#584d7d"/>
-            <path d="M14 -8 C26 -9 28 6 16 8" fill="none" stroke="#332c4a" stroke-width="5"/>
-            <path d="M-11 -11 L-9 14" stroke="#6b5f96" stroke-width="2.4" fill="none"/>
-          </g>
-          <g id="page">
-            <path d="M-52 -34 L54 -40 L58 34 L-48 40 Z" fill="#efeaf4"/>
-            <path d="M-52 -34 L-30 -35 L-26 39 L-48 40 Z" fill="#cec7dd"/>
-            <g stroke="#9990b0" stroke-width="2.2" fill="none">
-              <path d="M-38 -20 L40 -25 M-37 -8 L41 -13 M-36 4 L28 0 M-35 16 L41 11"/>
-            </g>
-          </g>
-        </defs>
-
-
-        <g clip-path="url(#room)">
-
-        <!-- ══ FAR ══ the room shell, built to one vanishing point at
-             (560, 430). Low camera, so we're looking slightly up. ══ -->
-        <g class="far">
-          <polygon points="140,60 800,60 1000,-248 0,-63" fill="url(#ceiling)"/>
-          <polygon points="140,60 0,-63 0,483 140,470" fill="url(#leftwall)"/>
-          <polygon points="800,60 1000,-248 1000,503 800,470" fill="url(#rightwall)"/>
-          <rect x="140" y="60" width="660" height="410" fill="url(#backwall)"/>
-
-          <!-- window -->
-          <rect x="168" y="96" width="304" height="352" fill="url(#sky)"/>
-          <rect x="168" y="96" width="304" height="352" fill="url(#sun)"/>
-          <!-- distant city, low contrast because it's far away -->
-          <g class="city">
-            <path d="M168 372 L168 448 L472 448 L472 330 L456 330 L456 306 L438 306 L438 350 L420 350 L420 322 L398 322 L398 360 L378 360 L378 336 L356 336 L356 368 L332 368 L332 344 L310 344 L310 374 L288 374 L288 352 L264 352 L264 380 L240 380 L240 358 L214 358 L214 386 L192 386 L192 366 Z"/>
-          </g>
-          <g class="citylights">
-            <rect x="222" y="392" width="4" height="6"/><rect x="234" y="400" width="4" height="6"/>
-            <rect x="276" y="386" width="4" height="6"/><rect x="298" y="380" width="4" height="6"/>
-            <rect x="344" y="374" width="4" height="6"/><rect x="366" y="366" width="4" height="6"/>
-            <rect x="408" y="356" width="4" height="6"/><rect x="430" y="336" width="4" height="6"/>
-            <rect x="446" y="342" width="4" height="6"/><rect x="252" y="410" width="4" height="6"/>
-          </g>
-          <!-- mullions -->
-          <g class="mullion">
-            <rect x="164" y="92" width="312" height="360" fill="none" stroke-width="9"/>
-            <rect x="316" y="96" width="8" height="352"/>
-            <rect x="168" y="216" width="304" height="7"/>
-            <rect x="168" y="330" width="304" height="7"/>
-          </g>
-          <!-- the sun's bloom pushing past the frame -->
-          <ellipse cx="286" cy="392" rx="150" ry="96" fill="#ffcf96" opacity=".5" filter="url(#bloom)"/>
-
-          <!-- board on the back wall, right of the window. Six different
-               kinds of pinned thing, at six different angles. -->
-          <g class="board" filter="url(#far)">
-            <rect x="524" y="120" width="256" height="238" fill="#2b2540"/>
-            <rect x="524" y="120" width="256" height="238" fill="none" stroke="#4b4268" stroke-width="5"/>
-            <g class="threads">
-              <path d="M566 166 L646 214 L742 158 M614 300 L700 262 L750 322 M566 166 L614 300"/>
-            </g>
-            <use href="#p-doc"    transform="translate(566 166) rotate(-4)"/>
-            <use href="#p-photo"  transform="translate(646 214) rotate(3)"/>
-            <use href="#p-card"   transform="translate(742 158) rotate(-6)"/>
-            <use href="#p-sticky" transform="translate(614 300) rotate(6)"/>
-            <use href="#p-torn"   transform="translate(700 262) rotate(-3)"/>
-            <use href="#p-strip"  transform="translate(750 322) rotate(4)"/>
-            <use href="#p-sticky" transform="translate(556 246) rotate(-8) scale(.8)"/>
-            <use href="#p-photo"  transform="translate(700 140) rotate(5) scale(.78)"/>
-            <g class="pins">
-              <use href="#pin" transform="translate(566 138)"/><use href="#pin" transform="translate(646 194)"/>
-              <use href="#pin" transform="translate(742 143)"/><use href="#pin" transform="translate(614 283)"/>
-              <use href="#pin" transform="translate(700 245)"/><use href="#pin" transform="translate(750 294)"/>
-            </g>
-          </g>
-
-          <!-- shelf on the right wall, in perspective -->
-          <g class="shelf" filter="url(#far)">
-            <polygon points="812,196 1000,164 1000,182 812,212"/>
-            <polygon points="812,276 1000,254 1000,272 812,292"/>
-            <g class="books">
-              <rect x="828" y="160" width="13" height="38"/><rect x="843" y="158" width="9" height="40"/>
-              <rect x="854" y="162" width="15" height="36"/><rect x="871" y="156" width="11" height="42"/>
-              <rect x="884" y="161" width="14" height="37"/><rect x="900" y="157" width="10" height="41"/>
-              <rect x="836" y="243" width="12" height="35"/><rect x="850" y="240" width="15" height="38"/>
-              <rect x="867" y="245" width="10" height="33"/><rect x="879" y="239" width="13" height="39"/>
-            </g>
-          </g>
-        </g>
-
-        <!-- ══ MID ══ floor, the light landing on it, a chair ══ -->
-        <g class="mid">
-          <polygon points="0,483 140,470 800,470 1000,503 1000,600 0,600" fill="url(#floor)"/>
-          <!-- the window's light pooling and reflecting -->
-          <polygon points="168,470 472,470 616,600 40,600" fill="url(#pool)"/>
-          <polygon points="176,470 300,470 268,600 96,600" fill="#ffd9a8" opacity=".13"/>
-          <path d="M0 470 L1000 470" class="skirting"/>
-
-          <!-- the shaft of light itself, hanging in the air -->
-          <polygon points="472,110 476,444 760,600 300,600" fill="url(#shaft)" filter="url(#soft)"/>
-
-          <!-- chair, mostly silhouette -->
-          <g class="chair">
-            <path d="M246 316 C232 318 226 330 227 344 L232 414 C233 426 242 434 254 434 L318 434 C330 434 338 426 338 414 L336 342 C336 328 328 318 314 316 Z"/>
-            <rect x="272" y="434" width="20" height="40"/>
-            <path d="M282 470 L236 508 M282 470 L330 508 M282 470 L282 516 M282 470 L246 516 M282 470 L320 516"/>
-            <path class="chairlight" d="M246 316 C232 318 226 330 227 344 L232 414 L246 414 L240 330 Z"/>
-          </g>
-
-          <!-- dust in the light -->
-          <g class="motes">
-            <circle cx="330" cy="240" r="2.4"/><circle cx="392" cy="176" r="1.8"/>
-            <circle cx="286" cy="330" r="2"/><circle cx="424" cy="286" r="2.6"/>
-            <circle cx="356" cy="410" r="1.6"/><circle cx="246" cy="196" r="2"/>
-            <circle cx="452" cy="360" r="1.8"/><circle cx="308" cy="130" r="1.6"/>
-          </g>
-        </g>
-
-
-        <!-- ══ CAST ══ four poses, cross-faded by CSS ══ -->
-        <ellipse class="contact" cx="566" cy="588" rx="132" ry="22"/>
-        <g class="figure" transform="translate(116 58) scale(.9)">
-        <g class="cast">
-
-          <!-- 1 · standing, hands at his sides, looking at you -->
-          <g class="pose pose-1">
-            <g class="limb">
-              <path class="arm-out" d="M456 282 C442 318 437 372 439 424"/>
-              <path class="arm-out" d="M544 282 C558 318 563 372 561 424"/>
-              <path class="arm-in"  d="M456 282 C442 318 437 372 439 424"/>
-              <path class="arm-in"  d="M544 282 C558 318 563 372 561 424"/>
-            </g>
-            <use href="#torso"/>
-            <path class="cuff" d="M430 418 L449 416 M551 416 L570 418"/>
-            <use href="#hand" transform="translate(438 444) rotate(-7) scale(1.12)"/>
-            <use href="#hand" transform="translate(562 444) rotate(7) scale(1.12)"/>
-            <g transform="rotate(-2 500 209) translate(500 250) scale(1.13) translate(-500 -250)">
-              <use href="#head-back"/>
-              <g class="face">
-                <use href="#eye"/>
-                <use href="#eye" transform="translate(963 0) scale(-.93 1)"/>
-              </g>
-              <use href="#head-front"/>
-            </g>
-          </g>
-
-          <!-- 2 · hands in his pockets -->
-          <g class="pose pose-2" transform="translate(-7 0) rotate(1 500 600)">
-            <g class="limb">
-              <path class="arm-out" d="M460 284 C444 320 438 392 452 490"/>
-              <path class="arm-out" d="M540 284 C556 320 562 392 548 490"/>
-              <path class="arm-in"  d="M460 284 C444 320 438 392 452 490"/>
-              <path class="arm-in"  d="M540 284 C556 320 562 392 548 490"/>
-            </g>
-            <use href="#torso"/>
-            <g class="limb">
-              <path class="arm-out" d="M446 452 C444 470 448 486 456 498"/>
-              <path class="arm-out" d="M554 452 C556 470 552 486 544 498"/>
-              <path class="arm-in"  d="M446 452 C444 470 448 486 456 498"/>
-              <path class="arm-in"  d="M554 452 C556 470 552 486 544 498"/>
-              <path class="cuff" d="M436 468 L454 466 M546 466 L564 468"/>
-            </g>
-            <g transform="rotate(4 500 209) translate(500 250) scale(1.13) translate(-500 -250)">
-              <use href="#head-back"/>
-              <g class="face">
-                <use href="#eye"/>
-                <use href="#eye" transform="translate(963 0) scale(-.93 1)"/>
-              </g>
-              <use href="#head-front"/>
-            </g>
-          </g>
-
-          <!-- 3 · coffee, looking out of the window -->
-          <g class="pose pose-3">
-            <g class="limb">
-              <path class="arm-out" d="M456 282 C442 318 437 372 439 424"/>
-              <path class="arm-out" d="M544 282 C558 316 554 358 534 392"/>
-              <path class="arm-in"  d="M456 282 C442 318 437 372 439 424"/>
-              <path class="arm-in"  d="M544 282 C558 316 554 358 534 392"/>
-            </g>
-            <use href="#torso"/>
-            <path class="cuff" d="M430 418 L449 416 M540 380 L554 372"/>
-            <use href="#mug" transform="translate(526 418) rotate(-6)"/>
-            <use href="#hand" transform="translate(438 444) rotate(-7) scale(1.12)"/>
-            <use href="#hand" transform="translate(530 400) rotate(10) scale(1.06)"/>
-            <g transform="rotate(-8 500 209) translate(500 250) scale(1.13) translate(-500 -250)">
-              <use href="#head-back"/>
-              <g class="face">
-                <use href="#eye"/>
-                <use href="#eye" transform="translate(963 0) scale(-.93 1)"/>
-              </g>
-              <use href="#head-front"/>
-            </g>
-          </g>
-
-          <!-- 4 · reading a page -->
-          <g class="pose pose-4">
-            <g class="limb">
-              <path class="arm-out" d="M456 282 C440 316 444 356 466 382"/>
-              <path class="arm-out" d="M544 282 C560 316 556 356 534 382"/>
-              <path class="arm-in"  d="M456 282 C440 316 444 356 466 382"/>
-              <path class="arm-in"  d="M544 282 C560 316 556 356 534 382"/>
-            </g>
-            <use href="#torso"/>
-            <g transform="translate(0 6) rotate(4 500 209) translate(500 250) scale(1.13) translate(-500 -250)">
-              <use href="#head-back"/>
-              <g class="face face--down">
-                <use href="#eye"/>
-                <use href="#eye" transform="translate(963 0) scale(-.93 1)"/>
-              </g>
-              <use href="#head-front"/>
-            </g>
-            <use href="#page" transform="translate(500 402) rotate(-3)"/>
-            <use href="#hand" transform="translate(468 390) rotate(-16) scale(1.12)"/>
-            <use href="#hand" transform="translate(532 390) rotate(16) scale(1.12)"/>
-          </g>
-        </g>
-        </g>
-
-
-        <!-- ══ NEAR ══ foreground desk. Blurred, because it's a foot
-             from the lens — this is what creates the sense of space. ══ -->
-        <g class="near" filter="url(#near)">
-          <polygon points="-20,494 300,470 356,600 -20,600" fill="url(#desk)"/>
-          <polygon points="-20,494 300,470 302,486 -20,512" fill="#6b5f8e"/>
-          <!-- monitor, seen from behind -->
-          <polygon points="20,300 214,286 222,470 26,478" fill="#171426"/>
-          <polygon points="20,300 214,286 216,300 22,314" fill="#332c50"/>
-          <rect x="104" y="470" width="40" height="26" fill="#171426"/>
-          <!-- mug -->
-          <path d="M232 508 L292 502 L286 566 C266 578 244 574 238 562 Z" fill="#3b3454"/>
-          <path d="M232 508 L292 502 L290 518 L234 524 Z" fill="#5b5180"/>
-          <path d="M290 516 C312 512 316 538 296 544" fill="none" stroke="#3b3454" stroke-width="9"/>
-          <!-- papers -->
-          <polygon points="316,528 430,514 458,570 340,588" fill="#5a5178"/>
-          <polygon points="322,540 424,528 444,562 344,576" fill="#736a95"/>
-          <!-- lamp glow spilling in from the right -->
-          <ellipse cx="944" cy="524" rx="150" ry="90" fill="#ffc98e" opacity=".22"/>
-        </g>
-
-        <!-- ══ GRADE ══ colour wash + vignette + film grain ══ -->
-        <rect class="warmwash" x="0" y="0" width="1000" height="600"/>
-        <rect class="coolwash" x="0" y="0" width="1000" height="600"/>
-        <rect class="vig" x="0" y="0" width="1000" height="600" fill="url(#vigg)"/>
-        <rect class="grain" x="0" y="0" width="1000" height="600" filter="url(#grain)"/>
-        </g>
-      </svg>
-
-
-      <!-- ══ SOCIALS ══ [EDIT] your links live here ══ -->
-      <nav class="orbit" aria-label="Elsewhere">
-        <a class="orb" style="--i:0" href="https://substack.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
-          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-substack"/></svg></span><span class="orb__label">Substack</span></span>
-          <span class="u-hide">Substack</span>
-        </a>
-        <a class="orb" style="--i:1" href="https://www.youtube.com/@ghoulstuffs" target="_blank" rel="noopener noreferrer">
-          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-youtube"/></svg></span><span class="orb__label">YouTube</span></span>
-          <span class="u-hide">YouTube</span>
-        </a>
-        <a class="orb orb--own" style="--i:2" href="https://fashionxd.com/blog/" target="_blank" rel="noopener noreferrer">
-          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#i-fashionxd"/></svg></span><span class="orb__label">FashionXD</span></span>
-          <span class="u-hide">FashionXD</span>
-        </a>
-        <a class="orb" style="--i:3" href="https://www.linkedin.com/in/ghoulstuffs/" target="_blank" rel="noopener noreferrer">
-          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg></span><span class="orb__label">LinkedIn</span></span>
-          <span class="u-hide">LinkedIn</span>
-        </a>
-        <a class="orb" style="--i:4" href="https://x.com/GhoulStuffs" target="_blank" rel="noopener noreferrer">
-          <span class="orb__level"><span class="orb__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg></span><span class="orb__label">X</span></span>
-          <span class="u-hide">X</span>
-        </a>
-      </nav>
-
-      <!-- ══ 5 · SOUND ══ -->
-      <button class="sound" id="sound" type="button" aria-pressed="false">
-        <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="sound__text">Sound off</span>
-      </button>
-
+        <footer class="footer">
+            <p>Original character artwork. Not affiliated with any existing series.</p>
+        </footer>
     </div>
-  </main>
-
-  <!-- ══ 6 · FOOTER ══ -->
-  <footer class="footer">
-    <p>Original character and artwork. Not affiliated with any existing series.</p>
-  </footer>
-
-</div>
-
-<script src="sound.js" defer></script>
+    <script src="sound.js" defer></script>
 </body>
 </html>
