@@ -61,7 +61,8 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures the images fill the screen nicely */
+    /* Changed from 'cover' to 'contain' so the image never gets cut off */
+    object-fit: contain; 
     opacity: 0;
     animation: fadeCycle 25s infinite; /* 5 images * 5 seconds each */
 }
@@ -91,22 +92,34 @@ body, html {
 
 .icon-wrapper {
     position: absolute;
-    color: #ffffff;
-    font-size: 2.5rem;
+    /* Increased base size significantly */
+    font-size: 4rem; 
     text-decoration: none;
     pointer-events: auto; /* Makes the icons clickable */
-    transition: color 0.3s;
-    text-shadow: 0 0 15px #000, 0 0 5px #000;
+    transition: filter 0.3s, transform 0.3s;
 }
 
+/* Applying Brand Colors */
+.icon-1 { color: #ffffff; } /* X / Twitter */
+.icon-2 { color: #0a66c2; } /* LinkedIn */
+.icon-3 { color: #ff6719; } /* Substack */
+.icon-4 { color: #ff0000; } /* YouTube */
+.icon-5 { color: #24a1de; } /* Telegram */
+.icon-6 { color: #b92b27; } /* Quora */
+
+/* Ensure the custom SVG (Substack) inherits the color properly */
 .icon-wrapper svg {
-    filter: drop-shadow(0 0 10px #000);
+    fill: currentColor;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
 }
 
-/* Hover Interaction */
+.icon-wrapper i {
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
+}
+
+/* Hover Interaction - Makes them glow when hovered */
 .icon-wrapper:hover {
-    color: #bbbbbb;
-    text-shadow: 0 0 25px #fff;
+    filter: drop-shadow(0 0 20px currentColor);
 }
 
 /* Placing them randomly around the background & animating sizes/floating */
