@@ -1,0 +1,132 @@
+/* Base Page Setup */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #050505; /* Deep space black */
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+/* Initial Click Screen */
+#start-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Metal Mania', cursive;
+    font-size: 3rem;
+    letter-spacing: 3px;
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity 1.5s ease-out;
+}
+
+/* High Contrast Goth Name */
+.goth-text {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    color: #ffffff;
+    font-family: 'Creepster', cursive;
+    font-size: 3.5rem;
+    letter-spacing: 4px;
+    margin: 0;
+    z-index: 20;
+    /* Heavy black text-shadow for extreme contrast */
+    text-shadow: 
+        4px 4px 0 #000, 
+        -2px -2px 0 #000, 
+        2px -2px 0 #000, 
+        -2px 2px 0 #000, 
+        0px 0px 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Slideshow Container */
+.slideshow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+/* Smooth Image Fading Animation */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the images fill the screen nicely */
+    opacity: 0;
+    animation: fadeCycle 25s infinite; /* 5 images * 5 seconds each */
+}
+
+/* Staggering the fade delays for each image */
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 5s; }
+.slide:nth-child(3) { animation-delay: 10s; }
+.slide:nth-child(4) { animation-delay: 15s; }
+.slide:nth-child(5) { animation-delay: 20s; }
+
+@keyframes fadeCycle {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    20% { opacity: 1; }
+    30% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Floating Orbiting Icons */
+.social-universe {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; /* Allows clicks to pass through empty space */
+    z-index: 10;
+}
+
+.icon-wrapper {
+    position: absolute;
+    color: #ffffff;
+    font-size: 2.5rem;
+    text-decoration: none;
+    pointer-events: auto; /* Makes the icons clickable */
+    transition: color 0.3s;
+    text-shadow: 0 0 15px #000, 0 0 5px #000;
+}
+
+.icon-wrapper svg {
+    filter: drop-shadow(0 0 10px #000);
+}
+
+/* Hover Interaction */
+.icon-wrapper:hover {
+    color: #bbbbbb;
+    text-shadow: 0 0 25px #fff;
+}
+
+/* Placing them randomly around the background & animating sizes/floating */
+.icon-1 { top: 15%; left: 15%; animation: orbit1 12s infinite ease-in-out alternate; }
+.icon-2 { top: 75%; left: 20%; animation: orbit2 15s infinite ease-in-out alternate-reverse; }
+.icon-3 { top: 25%; right: 15%; animation: orbit3 18s infinite ease-in-out alternate; }
+.icon-4 { top: 65%; right: 20%; animation: orbit1 14s infinite ease-in-out alternate-reverse; }
+.icon-5 { top: 45%; left: 5%; animation: orbit2 16s infinite ease-in-out alternate; }
+.icon-6 { top: 50%; right: 8%; animation: orbit3 19s infinite ease-in-out alternate-reverse; }
+
+/* Scale up and down while floating */
+@keyframes orbit1 {
+    0% { transform: translate(0, 0) scale(0.8); }
+    100% { transform: translate(40px, -50px) scale(1.3); }
+}
+@keyframes orbit2 {
+    0% { transform: translate(0, 0) scale(1.1); }
+    100% { transform: translate(-30px, 40px) scale(0.7); }
+}
+@keyframes orbit3 {
+    0% { transform: translate(0, 0) scale(0.9); }
+    100% { transform: translate(-40px, -30px) scale(1.4); }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traumatized Ghoul</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Goth font for the name -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Metal+Mania&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Start Screen to allow audio autoplay -->
+    <div id="start-screen">
+        <span>Click to Enter</span>
+    </div>
+
+    <!-- Audio Player (Requires a music.mp3 file in your repo) -->
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Top Left Name -->
+    <h1 class="goth-text">Traumatized Ghoul</h1>
+
+    <!-- Image Fading Sequence -->
+    <div class="slideshow">
+        <img src="girl1.png" alt="Girl 1" class="slide">
+        <img src="girl2.png" alt="Girl 2" class="slide">
+        <img src="girl3.png" alt="Girl 3" class="slide">
+        <img src="girl4.png" alt="Girl 4" class="slide">
+        <img src="girl5.png" alt="Girl 5" class="slide">
+    </div>
+
+    <!-- Floating Orbiting Social Icons -->
+    <div class="social-universe">
+        <a href="https://x.com/GhoulStuffs" target="_blank" class="icon-wrapper icon-1">
+            <i class="fa-brands fa-x-twitter"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/ghoulstuffs" target="_blank" class="icon-wrapper icon-2">
+            <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+        <a href="https://substack.com/@ghoulstuffs" target="_blank" class="icon-wrapper icon-3">
+            <!-- Custom Substack SVG because it's not standard in all icon fonts -->
+            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+                <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+            </svg>
+        </a>
+        <a href="https://www.youtube.com/@ghoulstuffs" target="_blank" class="icon-wrapper icon-4">
+            <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="https://t.me/ghoulstuffs" target="_blank" class="icon-wrapper icon-5">
+            <i class="fa-brands fa-telegram"></i>
+        </a>
+        <a href="https://www.quora.com/profile/Immortal-Ghoul" target="_blank" class="icon-wrapper icon-6">
+            <i class="fa-brands fa-quora"></i>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
