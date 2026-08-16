@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Traumatized Ghoul</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Goth font for the name -->
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Metal+Mania&display=swap" rel="stylesheet">
+    <!-- Goth & Melodramatic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Metal+Mania&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Social Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Start Screen to allow audio autoplay -->
+    <!-- Start Screen -->
     <div id="start-screen">
-        <span>Click to Enter</span>
+        <div class="start-content">
+            <h2 class="enter-text">Click to Enter 💀</h2>
+            <div class="warning-box">
+                <p class="warning-text">⚠️ 18+ WARNING</p>
+                <p class="footnote-text">Hello, I am Traumatized Ghoul, @ghoulstuffs. You may now proceed...to...see...and remember...</p>
+                <p class="quote-text">'Always be a corporate professional...'</p>
+            </div>
+        </div>
     </div>
 
-    <!-- Audio Player (Requires a music.mp3 file in your repo) -->
+    <!-- Audio Player -->
     <audio id="bg-music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -42,7 +49,6 @@
             <i class="fa-brands fa-linkedin-in"></i>
         </a>
         <a href="https://substack.com/@ghoulstuffs" target="_blank" class="icon-wrapper icon-3">
-            <!-- Custom Substack SVG because it's not standard in all icon fonts -->
             <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
                 <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
             </svg>
