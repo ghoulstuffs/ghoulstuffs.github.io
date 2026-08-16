@@ -16,14 +16,61 @@ body, html {
     background-color: #000;
     color: #fff;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: 'Metal Mania', cursive;
-    font-size: 3rem;
-    letter-spacing: 3px;
     z-index: 100;
     cursor: pointer;
     transition: opacity 1.5s ease-out;
+    text-align: center;
+    padding: 20px;
+}
+
+.start-content {
+    max-width: 600px;
+}
+
+.enter-text {
+    font-family: 'Metal Mania', cursive;
+    font-size: 3.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    transition: transform 0.3s, text-shadow 0.3s;
+}
+
+.enter-text:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.warning-box {
+    border-top: 1px solid #333;
+    padding-top: 30px;
+}
+
+.warning-text {
+    color: #b30000; /* Deep red */
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px rgba(179, 0, 0, 0.5);
+}
+
+.footnote-text {
+    font-family: monospace;
+    color: #888888;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.quote-text {
+    font-family: 'Cinzel Decorative', serif; /* Melodramatic font */
+    color: #dfdfdf;
+    font-size: 1.8rem;
+    font-style: italic;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
 /* High Contrast Goth Name */
@@ -37,7 +84,6 @@ body, html {
     letter-spacing: 4px;
     margin: 0;
     z-index: 20;
-    /* Heavy black text-shadow for extreme contrast */
     text-shadow: 
         4px 4px 0 #000, 
         -2px -2px 0 #000, 
@@ -61,13 +107,12 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* Changed from 'cover' to 'contain' so the image never gets cut off */
-    object-fit: contain; 
+    object-fit: contain; /* Prevents the image from being cut off */
     opacity: 0;
-    animation: fadeCycle 25s infinite; /* 5 images * 5 seconds each */
+    animation: fadeCycle 25s infinite; 
 }
 
-/* Staggering the fade delays for each image */
+/* Staggering the fade delays */
 .slide:nth-child(1) { animation-delay: 0s; }
 .slide:nth-child(2) { animation-delay: 5s; }
 .slide:nth-child(3) { animation-delay: 10s; }
@@ -86,28 +131,26 @@ body, html {
 .social-universe {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; /* Allows clicks to pass through empty space */
+    pointer-events: none; 
     z-index: 10;
 }
 
 .icon-wrapper {
     position: absolute;
-    /* Increased base size significantly */
-    font-size: 4rem; 
+    font-size: 4rem; /* MUCH larger icons */
     text-decoration: none;
-    pointer-events: auto; /* Makes the icons clickable */
+    pointer-events: auto; 
     transition: filter 0.3s, transform 0.3s;
 }
 
-/* Applying Brand Colors */
-.icon-1 { color: #ffffff; } /* X / Twitter */
-.icon-2 { color: #0a66c2; } /* LinkedIn */
-.icon-3 { color: #ff6719; } /* Substack */
-.icon-4 { color: #ff0000; } /* YouTube */
-.icon-5 { color: #24a1de; } /* Telegram */
-.icon-6 { color: #b92b27; } /* Quora */
+/* Brand Colors */
+.icon-1 { color: #ffffff; } 
+.icon-2 { color: #0a66c2; } 
+.icon-3 { color: #ff6719; } 
+.icon-4 { color: #ff0000; } 
+.icon-5 { color: #24a1de; } 
+.icon-6 { color: #b92b27; } 
 
-/* Ensure the custom SVG (Substack) inherits the color properly */
 .icon-wrapper svg {
     fill: currentColor;
     filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
@@ -117,12 +160,12 @@ body, html {
     filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
 }
 
-/* Hover Interaction - Makes them glow when hovered */
+/* Glowing Hover Effect */
 .icon-wrapper:hover {
-    filter: drop-shadow(0 0 20px currentColor);
+    filter: drop-shadow(0 0 25px currentColor);
 }
 
-/* Placing them randomly around the background & animating sizes/floating */
+/* Orbit Placements */
 .icon-1 { top: 15%; left: 15%; animation: orbit1 12s infinite ease-in-out alternate; }
 .icon-2 { top: 75%; left: 20%; animation: orbit2 15s infinite ease-in-out alternate-reverse; }
 .icon-3 { top: 25%; right: 15%; animation: orbit3 18s infinite ease-in-out alternate; }
@@ -130,7 +173,6 @@ body, html {
 .icon-5 { top: 45%; left: 5%; animation: orbit2 16s infinite ease-in-out alternate; }
 .icon-6 { top: 50%; right: 8%; animation: orbit3 19s infinite ease-in-out alternate-reverse; }
 
-/* Scale up and down while floating */
 @keyframes orbit1 {
     0% { transform: translate(0, 0) scale(0.8); }
     100% { transform: translate(40px, -50px) scale(1.3); }
